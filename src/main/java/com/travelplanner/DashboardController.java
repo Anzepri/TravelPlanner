@@ -11,18 +11,18 @@ public class DashboardController {
     @FXML
     private ListView<Trip> tripListView;
 
-    // 🔹 INITIALIZE
+    
     @FXML
     public void initialize() {
 
         System.out.println("---- DASHBOARD OPENED ----");
 
-        // 🔥 ALWAYS reload trips from file
+       
         TripManager.loadTrips();
 
         refreshTrips();
 
-        // double-click to open trip
+        
         tripListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Trip selected = tripListView.getSelectionModel().getSelectedItem();
@@ -33,7 +33,7 @@ public class DashboardController {
         });
     }
 
-    // 🔹 REFRESH (FILTER PER USER)
+   
     private void refreshTrips() {
 
         tripListView.getItems().clear();
@@ -56,7 +56,7 @@ public class DashboardController {
         }
     }
 
-    // 🔹 OPEN TRIP DETAILS
+    
     private void openTrip(Trip trip) {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -124,11 +124,10 @@ public class DashboardController {
     }
 
 
-    // 🔹 LOGOUT
+   
     @FXML
     private void handleLogout(javafx.event.ActionEvent event) {
 
-        // 🔥 CLEAR USER SESSION
         CurrentUser.setEmail(null);
 
         try {
