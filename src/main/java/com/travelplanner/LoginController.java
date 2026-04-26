@@ -16,7 +16,7 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    // 🔹 LOGIN
+    
     @FXML
     private void handleLogin(javafx.event.ActionEvent event) {
 
@@ -28,24 +28,24 @@ public class LoginController {
             return;
         }
 
-        // user not found
+        
         if (!UserManager.userExists(email)) {
             showError("User not found. Please register first.");
             return;
         }
 
-        // wrong password
+        
         if (UserManager.isWrongPassword(email, password)) {
             showError("Wrong password");
             return;
         }
 
-        // success
+       
         if (UserManager.validate(email, password)) {
 
             System.out.println("LOGGING IN AS: " + email);
 
-            // 🔥 SET USER BEFORE LOADING DASHBOARD
+            
             CurrentUser.setEmail(email);
 
             try {
@@ -66,7 +66,6 @@ public class LoginController {
         }
     }
 
-    // 🔹 REGISTER
     @FXML
     private void handleRegister(javafx.event.ActionEvent event) {
 
@@ -85,7 +84,7 @@ public class LoginController {
         }
     }
 
-    // 🔹 ALERTS
+    
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
