@@ -24,7 +24,7 @@ public class TripManager {
         }
     }
 
-    // 🔹 LOAD
+    
     public static void loadTrips() {
 
         trips.clear();
@@ -48,7 +48,7 @@ public class TripManager {
 
                     trip.setOwnerEmail(parts[0]);
 
-                    // 🔥 LOAD ITINERARY
+                    
                     if (parts.length == 6) {
                         String[] items = parts[5].split(";");
 
@@ -78,7 +78,7 @@ public class TripManager {
         }
     }
 
-    // 🔹 SAVE
+    
     public static void saveTrips() {
 
         try (FileWriter writer = new FileWriter(FILE)) {
@@ -93,7 +93,7 @@ public class TripManager {
                     .append(t.getStartDate()).append("|")
                     .append(t.getEndDate()).append("|");
 
-                // 🔥 SAVE ITINERARY
+                
                 List<ItineraryItem> items = t.getItinerary();
 
                 for (int i = 0; i < items.size(); i++) {
