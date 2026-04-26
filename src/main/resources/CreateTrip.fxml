@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.travelplanner.CreateTripController">
+
+    <Label text="Create New Trip"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <TextField fx:id="nameField" promptText="Trip Name" maxWidth="250"/>
+    <TextField fx:id="destinationField" promptText="Destination" maxWidth="250"/>
+
+    <DatePicker fx:id="startDatePicker" />
+    <DatePicker fx:id="endDatePicker" />
+
+    <Button text="Create Trip" onAction="#handleCreateTrip"/>
+
+</VBox>

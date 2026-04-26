@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.travelplanner.LoginController">
+
+    <Label text="Travel Planner Login"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <TextField fx:id="emailField" promptText="Email" maxWidth="250"/>
+    <PasswordField fx:id="passwordField" promptText="Password" maxWidth="250"/>
+
+       <Button text="Register" prefWidth="200"
+            onAction="#handleRegister"/>
+       <Button text="Login" prefWidth="200"
+            onAction="#handleLogin"/>
+      
+
+</VBox>

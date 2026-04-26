@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="TOP_CENTER" spacing="20"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.travelplanner.DashboardController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <!-- Title -->
+    <Label text="Travel Planner Dashboard"
+           style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+
+    <!-- Trip List -->
+    <ListView fx:id="tripListView"
+              prefHeight="300"
+              prefWidth="400" />
+
+    <!-- Buttons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Create Trip"
+                prefWidth="150"
+                onAction="#goToCreateTrip"/>
+        <Button text="Delete Trip"
+                prefWidth="150"
+                onAction="#handleDeleteTrip"/>
+        <Button text="Logout"
+                prefWidth="150"
+                onAction="#handleLogout"/>
+    </HBox>
+
+</VBox>

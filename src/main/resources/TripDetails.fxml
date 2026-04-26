@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.travelplanner.TripDetailsController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Title -->
+    <Label fx:id="tripTitle"
+           style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+    <Label fx:id="destinationLabel"/>
+    <Label fx:id="startDateLabel"/>
+    <Label fx:id="endDateLabel"/>
+
+    <!-- Inputs -->
+    <HBox spacing="10">
+        <DatePicker fx:id="datePicker"/>
+
+        <TextField fx:id="activityField"
+                   promptText="Activity"
+                   HBox.hgrow="ALWAYS"/>
+
+        <!-- TIME PICKER -->
+        <HBox spacing="5">
+            <ComboBox fx:id="hourBox" prefWidth="70"/>
+            <Label text=":"/>
+            <ComboBox fx:id="minuteBox" prefWidth="70"/>
+            <ComboBox fx:id="ampmBox" prefWidth="80"/>
+        </HBox>
+
+        <TextField fx:id="locationField"
+                   promptText="Location"
+                   HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Buttons -->
+    <HBox spacing="10">
+        <Button text="Add" onAction="#addActivity"/>
+        <Button text="Edit" onAction="#editActivity"/>
+        <Button text="Delete" onAction="#deleteActivity"/>
+    </HBox>
+
+    <!-- List -->
+    <ListView fx:id="itineraryListView" VBox.vgrow="ALWAYS"/>
+
+    <Button text="Back" onAction="#goBack"/>
+
+</VBox>
