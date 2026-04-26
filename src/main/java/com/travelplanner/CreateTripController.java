@@ -29,7 +29,7 @@ public class CreateTripController {
         String startDate = String.valueOf(startDatePicker.getValue());
         String endDate = String.valueOf(endDatePicker.getValue());
 
-        // basic validation
+        
         if (name.isEmpty() || destination.isEmpty() ||
             startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
 
@@ -37,13 +37,13 @@ public class CreateTripController {
             return;
         }
 
-        // create trip
+        
         Trip trip = new Trip(name, destination, startDate, endDate);
 
-        // 🔥 link to logged-in user
+        
         trip.setOwnerEmail(CurrentUser.getEmail());
 
-        // add + save
+        
         TripManager.trips.add(trip);
         TripManager.saveTrips();
 
@@ -55,7 +55,7 @@ public class CreateTripController {
             Stage stage = (Stage) ((Node) event.getSource())
                     .getScene().getWindow();
 
-            // 🔥 DO NOT create new scene (keeps window size)
+            
             stage.getScene().setRoot(loader.load());
 
         } catch (Exception e) {
