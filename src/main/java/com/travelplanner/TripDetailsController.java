@@ -38,11 +38,11 @@ public class TripDetailsController {
 
     private Trip trip;
 
-    // 🔹 Initialize
+   
     @FXML
     public void initialize() {
 
-        // hours
+        //hours
         for (int i = 1; i <= 12; i++) {
             hourBox.getItems().add(String.format("%02d", i));
         }
@@ -79,7 +79,7 @@ public class TripDetailsController {
         });
     }
 
-    // 🔹 Set trip
+
     public void setTrip(Trip trip) {
         this.trip = trip;
 
@@ -91,7 +91,7 @@ public class TripDetailsController {
         refreshGroupedList();
     }
 
-    // 🔹 Get selected time
+    
     private String getSelectedTime() {
         if (hourBox.getValue() == null ||
             minuteBox.getValue() == null ||
@@ -104,7 +104,7 @@ public class TripDetailsController {
                ampmBox.getValue();
     }
 
-    // 🔹 Add activity
+    
     @FXML
     private void addActivity() {
 
@@ -131,7 +131,7 @@ public class TripDetailsController {
         clearInputs();
     }
 
-    // 🔹 Edit activity
+    
     @FXML
     private void editActivity() {
 
@@ -156,7 +156,7 @@ public class TripDetailsController {
         clearInputs();
     }
 
-    // 🔹 Delete
+    
     @FXML
     private void deleteActivity() {
 
@@ -169,7 +169,7 @@ public class TripDetailsController {
         refreshGroupedList();
     }
 
-    // 🔹 Group + sort
+    
     private void refreshGroupedList() {
 
         itineraryListView.getItems().clear();
@@ -185,7 +185,7 @@ public class TripDetailsController {
 
             List<ItineraryItem> items = grouped.get(date);
 
-            // sort by time
+            
             items.sort((a, b) ->
                     parseTime(a.getTime()).compareTo(parseTime(b.getTime()))
             );
@@ -207,7 +207,7 @@ public class TripDetailsController {
         }
     }
 
-    // 🔹 Helpers
+    
     private void clearInputs() {
         activityField.clear();
         locationField.clear();
@@ -225,7 +225,7 @@ public class TripDetailsController {
         alert.showAndWait();
     }
 
-    // 🔹 Back
+    
     @FXML
     private void goBack() {
         try {
