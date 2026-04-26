@@ -13,7 +13,7 @@ public class UserManager {
     private static Map<String, String> users = new HashMap<>();
     private static final String FILE = "users.txt";
 
-    // ensure file exists
+    
     private static void ensureFile() {
         try {
             File file = new File(FILE);
@@ -25,7 +25,7 @@ public class UserManager {
         }
     }
 
-    // load users
+    
     public static void loadUsers() {
         ensureFile();
 
