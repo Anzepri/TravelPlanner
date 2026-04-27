@@ -34,23 +34,17 @@ public class DashboardController {
     }
 
    
-    private void refreshTrips() {
-
+   private void refreshTrips() {
         tripListView.getItems().clear();
 
         String currentUser = CurrentUser.getEmail();
-        System.out.println("CURRENT USER: " + currentUser);
+        boolean isAdvisor = CurrentUser.isAdvisor(); // Check the role we stored at login
+
+        System.out.println("LOGGED IN AS: " + currentUser + " | ROLE: " + CurrentUser.getRole());
 
         for (Trip t : TripManager.trips) {
-
-            System.out.println("CHECKING TRIP: " + t.getName() +
-                    " | OWNER: " + t.getOwnerEmail());
-
-            if (t.getOwnerEmail() != null &&
-                t.getOwnerEmail().equals(currentUser)) {
-
-                System.out.println("ADDING TRIP: " + t.getName());
-
+            // LOGIC: Show the trip if the user is an Advisor OR if they own the trip
+            if (isAdvisor || (t.getOwnerEmail() != null && t.getOwnerEmail().equals(currentUser))) {
                 tripListView.getItems().add(t);
             }
         }
