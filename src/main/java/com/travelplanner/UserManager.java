@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class UserManager {
 
@@ -89,6 +90,31 @@ public class UserManager {
 
     public static String getRole(String email) {
         return roles.getOrDefault(email, "USER");
+    }
+
+    public static Map<String, String> getUsersWithRoles() {
+        return new TreeMap<>(roles);
+    }
+
+    public static boolean updateRole(String email, String role) {
+        if (!users.containsKey(email)) return false;
+        if (!"USER".equals(role) && !"TRIP_ADVISOR".equals(role)) return false;
+
+        roles.put(email, role);
+        saveUsers();
+        return true;
+    }
+
+    private static void saveUsers() {
+        ensureFile();
+
+        try (FileWriter writer = new FileWriter(FILE, false)) {
+            for (String email : new TreeMap<>(users).keySet()) {
+                writer.write(email + "," + users.get(email) + "," + roles.getOrDefault(email, "USER") + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean userExists(String email) {

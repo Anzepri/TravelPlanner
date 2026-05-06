@@ -28,6 +28,10 @@
         <Button text="Delete Trip"
                 prefWidth="150"
                 onAction="#handleDeleteTrip"/>
+        <Button fx:id="manageUsersButton"
+                text="Manage Users"
+                prefWidth="150"
+                onAction="#goToUserManagement"/>
         <Button text="Logout"
                 prefWidth="150"
                 onAction="#handleLogout"/>
