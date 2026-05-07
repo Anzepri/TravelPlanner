@@ -124,11 +124,13 @@ public class TripDetailsController {
         }
 
         ItineraryItem item = new ItineraryItem(title, date, time, location);
-        trip.getItinerary().add(item);
-        TripManager.saveTrips();
+
+        TripManager.addItineraryItem(trip, item);
+
         refreshGroupedList();
 
         clearInputs();
+
     }
 
     
@@ -150,7 +152,9 @@ public class TripDetailsController {
         selected.setDate(String.valueOf(datePicker.getValue()));
         selected.setTime(time);
         selected.setLocation(locationField.getText());
-        TripManager.saveTrips();
+
+        TripManager.updateItineraryItem(selected);
+
         refreshGroupedList();
 
         clearInputs();
@@ -164,9 +168,9 @@ public class TripDetailsController {
 
         if (selected == null || selected.getTitle().startsWith("===")) return;
 
-        trip.getItinerary().remove(selected);
-        TripManager.saveTrips();
+        TripManager.deleteItineraryItem(trip, selected);
         refreshGroupedList();
+        
     }
 
     

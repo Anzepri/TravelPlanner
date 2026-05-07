@@ -1,72 +1,95 @@
 package com.travelplanner;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserManager {
 
-    private static Map<String, String> users = new HashMap<>();
-    private static final String FILE = "users.txt";
-
-    
-    private static void ensureFile() {
-        try {
-            File file = new File(FILE);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    
     public static void loadUsers() {
-        ensureFile();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    users.put(parts[0], parts[1]);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Not needed anymore because users are loaded from PostgreSQL.
     }
 
     public static boolean register(String email, String password) {
-        if (users.containsKey(email)) return false;
-
-        users.put(email, password);
-
-        try (FileWriter writer = new FileWriter(FILE, true)) {
-            writer.write(email + "," + password + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (userExists(email)) {
+            return false;
         }
 
-        return true;
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Registration failed: " + e.getMessage());
+            return false;
+        }
     }
 
     public static boolean userExists(String email) {
-        return users.containsKey(email);
+        String sql = "SELECT user_id FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            System.out.println("User check failed: " + e.getMessage());
+            return false;
+        }
     }
 
     public static boolean validate(String email, String password) {
-        return users.containsKey(email) &&
-               users.get(email).equals(password);
+        String sql = "SELECT user_id FROM users WHERE username = ? AND password = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            System.out.println("Login failed: " + e.getMessage());
+            return false;
+        }
     }
 
     public static boolean isWrongPassword(String email, String password) {
-        return users.containsKey(email) &&
-               !users.get(email).equals(password);
+        return userExists(email) && !validate(email, password);
+    }
+
+    public static int getUserIdByEmail(String email) {
+        String sql = "SELECT user_id FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("user_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Failed to get user ID: " + e.getMessage());
+        }
+
+        return -1;
     }
 }

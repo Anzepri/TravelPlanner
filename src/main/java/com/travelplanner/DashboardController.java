@@ -115,8 +115,7 @@ public class DashboardController {
 
     if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.OK) {
 
-        TripManager.trips.remove(selected);
-        TripManager.saveTrips();
+        TripManager.deleteTrip(selected);
         refreshTrips();
 
         System.out.println("Deleted trip: " + selected.getName());
