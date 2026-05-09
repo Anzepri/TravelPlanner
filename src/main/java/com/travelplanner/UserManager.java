@@ -11,6 +11,28 @@ public class UserManager {
         // Not needed anymore because users are loaded from PostgreSQL.
     }
 
+    /**
+     * Secures passwords using SHA-256 hashing.
+     * Fixed: Use formatHex() for Java 17 compatibility.
+     */
+    private static String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(hash); 
+        } catch (Exception e) {
+            throw new RuntimeException("Error hashing password", e);
+        }
+    }
+
+    /**
+     * Prevents delimiters from breaking the file-based database.
+     */
+    public static String sanitize(String input) {
+        if (input == null) return "";
+        return input.replace("|", "-").replace(",", " ").trim();
+    }
+
     public static boolean register(String email, String password) {
         if (userExists(email)) {
             return false;
@@ -30,6 +52,18 @@ public class UserManager {
         } catch (SQLException e) {
             System.out.println("Registration failed: " + e.getMessage());
             return false;
+        }
+    }
+
+    private static void saveUsers() {
+        ensureFile();
+
+        try (FileWriter writer = new FileWriter(FILE, false)) {
+            for (String email : new TreeMap<>(users).keySet()) {
+                writer.write(email + "," + users.get(email) + "," + roles.getOrDefault(email, "USER") + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

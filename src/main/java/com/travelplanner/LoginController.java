@@ -10,16 +10,11 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
-    @FXML
-    private TextField emailField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
 
-    @FXML
-    private PasswordField passwordField;
-
-    
     @FXML
     private void handleLogin(javafx.event.ActionEvent event) {
-
         String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText();
 
@@ -28,38 +23,25 @@ public class LoginController {
             return;
         }
 
-        
         if (!UserManager.userExists(email)) {
             showError("User not found. Please register first.");
             return;
         }
 
-        
         if (UserManager.isWrongPassword(email, password)) {
             showError("Wrong password");
             return;
         }
 
-       
         if (UserManager.validate(email, password)) {
-
-            System.out.println("LOGGING IN AS: " + email);
-
-            
             CurrentUser.setEmail(email);
+            CurrentUser.setRole(UserManager.getRole(email));
 
             try {
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/Dashboard.fxml")
-                );
-
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
                 javafx.scene.Parent root = loader.load();
-
-                Stage stage = (Stage) ((Node) event.getSource())
-                        .getScene().getWindow();
-
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.getScene().setRoot(root);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -68,7 +50,6 @@ public class LoginController {
 
     @FXML
     private void handleRegister(javafx.event.ActionEvent event) {
-
         String email = emailField.getText().trim().toLowerCase();
         String password = passwordField.getText();
 
@@ -84,7 +65,6 @@ public class LoginController {
         }
     }
 
-    
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);

@@ -3,6 +3,7 @@ package com.travelplanner;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -10,6 +11,9 @@ public class DashboardController {
 
     @FXML
     private ListView<Trip> tripListView;
+
+    @FXML
+    private Button manageUsersButton;
 
     
     @FXML
@@ -21,6 +25,9 @@ public class DashboardController {
         TripManager.loadTrips();
 
         refreshTrips();
+
+        manageUsersButton.setVisible(CurrentUser.isAdvisor());
+        manageUsersButton.setManaged(CurrentUser.isAdvisor());
 
         
         tripListView.setOnMouseClicked(event -> {
@@ -34,23 +41,17 @@ public class DashboardController {
     }
 
    
-    private void refreshTrips() {
-
+   private void refreshTrips() {
         tripListView.getItems().clear();
 
         String currentUser = CurrentUser.getEmail();
-        System.out.println("CURRENT USER: " + currentUser);
+        boolean isAdvisor = CurrentUser.isAdvisor(); // Check the role we stored at login
+
+        System.out.println("LOGGED IN AS: " + currentUser + " | ROLE: " + CurrentUser.getRole());
 
         for (Trip t : TripManager.trips) {
-
-            System.out.println("CHECKING TRIP: " + t.getName() +
-                    " | OWNER: " + t.getOwnerEmail());
-
-            if (t.getOwnerEmail() != null &&
-                t.getOwnerEmail().equals(currentUser)) {
-
-                System.out.println("ADDING TRIP: " + t.getName());
-
+            // LOGIC: Show the trip if the user is an Advisor OR if they own the trip
+            if (isAdvisor || (t.getOwnerEmail() != null && t.getOwnerEmail().equals(currentUser))) {
                 tripListView.getItems().add(t);
             }
         }
@@ -81,6 +82,27 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/CreateTrip.fxml")
+            );
+
+            Stage stage = (Stage) ((Node) event.getSource())
+                    .getScene().getWindow();
+
+            stage.getScene().setRoot(loader.load());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToUserManagement(javafx.event.ActionEvent event) {
+        if (!CurrentUser.isAdvisor()) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/UserManagement.fxml")
             );
 
             Stage stage = (Stage) ((Node) event.getSource())

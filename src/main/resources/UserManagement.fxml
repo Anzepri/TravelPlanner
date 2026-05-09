@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="TOP_CENTER" spacing="20"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.travelplanner.UserManagementController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="User Management"
+           style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="userTable" prefWidth="600" prefHeight="350">
+        <columns>
+            <TableColumn fx:id="emailColumn" text="User" prefWidth="380"/>
+            <TableColumn fx:id="roleColumn" text="Role" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="makeAdvisorButton"
+                text="Make Trip Advisor"
+                prefWidth="170"
+                onAction="#handleMakeAdvisor"/>
+        <Button fx:id="makeUserButton"
+                text="Make User"
+                prefWidth="140"
+                onAction="#handleMakeUser"/>
+        <Button text="Back"
+                prefWidth="120"
+                onAction="#handleBack"/>
+    </HBox>
+
+</VBox>
