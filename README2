@@ -1,0 +1,222 @@
+# Travel Planner — PostgreSQL Setup Guide
+
+This guide explains how to set up the PostgreSQL database for the Travel Planner project.
+
+Follow these steps EXACTLY before running the application.
+---
+# 1. Install PostgreSQL + pgAdmin
+Download PostgreSQL:
+[https://www.postgresql.org/download/](https://www.postgresql.org/download/)
+During installation:
+* Install BOTH PostgreSQL and pgAdmin 4
+* Remember the password you create for the postgres user
+* Default port should remain:
+```
+5432
+```
+After installation:
+* Open pgAdmin 4
+* Connect to your PostgreSQL server
+---
+# 2. Create the Database
+Inside pgAdmin:
+1. Right click:
+Databases
+```
+2. Select:
+Create → Database
+```
+3. Name the database:
+travel_planner
+```
+4. Click Save
+---
+# 3. Run the Database Schema
+Click the newly created:
+travel_planner
+```
+database.
+Then:
+Tools → Query Tool
+```
+Paste the ENTIRE SQL below and run it.
+---
+# FULL DATABASE SCHEMA
+```sql
+DROP TABLE IF EXISTS shared_trips CASCADE;
+DROP TABLE IF EXISTS friends CASCADE;
+DROP TABLE IF EXISTS friend_requests CASCADE;
+DROP TABLE IF EXISTS itinerary_items CASCADE;
+DROP TABLE IF EXISTS trips CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+CREATE TABLE users (
+
+    user_id SERIAL PRIMARY KEY,
+
+    username VARCHAR(255) UNIQUE NOT NULL,
+
+    password VARCHAR(255) NOT NULL,
+
+    role VARCHAR(50) DEFAULT 'USER',
+
+    uid VARCHAR(20) UNIQUE
+);
+
+CREATE TABLE trips (
+
+    trip_id SERIAL PRIMARY KEY,
+
+    owner_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    trip_name VARCHAR(255),
+
+    destination VARCHAR(255),
+
+    start_date VARCHAR(50),
+
+    end_date VARCHAR(50)
+);
+
+CREATE TABLE itinerary_items (
+
+    item_id SERIAL PRIMARY KEY,
+
+    trip_id INTEGER REFERENCES trips(trip_id)
+        ON DELETE CASCADE,
+
+    title VARCHAR(255),
+
+    item_date VARCHAR(50),
+
+    item_time VARCHAR(50),
+
+    location VARCHAR(255)
+);
+
+CREATE TABLE friend_requests (
+
+    request_id SERIAL PRIMARY KEY,
+
+    sender_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    receiver_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    status VARCHAR(20) DEFAULT 'PENDING'
+);
+
+CREATE TABLE friends (
+
+    friendship_id SERIAL PRIMARY KEY,
+
+    user1_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    user2_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE shared_trips (
+
+    shared_id SERIAL PRIMARY KEY,
+
+    trip_id INTEGER REFERENCES trips(trip_id)
+        ON DELETE CASCADE,
+
+    owner_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    shared_with_id INTEGER REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    can_edit BOOLEAN DEFAULT FALSE
+);
+```
+---
+# 4. Configure DatabaseConnection.java
+Open:
+```
+src/main/java/com/travelplanner/DatabaseConnection.java
+```
+Update the username/password if needed.
+Example:
+```java
+private static final String URL =
+        "jdbc:postgresql://localhost:5432/travel_planner";
+private static final String USER = "postgres";
+private static final String PASSWORD = "YourPasswordHere";
+```
+
+Replace:
+```
+YourPasswordHere
+```
+with the password used during PostgreSQL installation.
+---
+# 5. Run the Project
+Open terminal in the project folder and run:
+```bash
+mvn javafx:run "-Djavafx.mainClass=com.travelplanner.Main"
+```
+---
+# 6. Required Software
+Required:
+* Java 17+
+* Maven
+* PostgreSQL
+* pgAdmin 4
+* VS Code (recommended)
+---
+# 7. Common Errors
+## Error: password authentication failed
+Wrong PostgreSQL username/password.
+Fix:
+* Check DatabaseConnection.java
+* Verify PostgreSQL password
+---
+## Error: database "travel_planner" does not exist
+Fix:
+* Create the database in pgAdmin
+---
+## Error: relation/table does not exist
+Fix:
+* Run the FULL DATABASE SCHEMA SQL again
+---
+## Error: port 5432 refused
+PostgreSQL service is not running.
+Fix:
+* Start PostgreSQL service
+* Reopen pgAdmin
+---
+# 8. GitHub Setup
+Clone repository:
+```bash
+git clone <REPO_URL>
+```
+Then:
+```bash
+cd travelplanner
+```
+Then run the project.
+---
+# 9. Current Features
+* User registration/login
+* Password hashing
+* UID system
+* Trip creation
+* Itinerary management
+* Shared trips frontend
+* Read-only / editable shared trip UI
+* Friends frontend system
+* PostgreSQL persistence
+---
+
+# 10. Notes
+
+* Shared trips backend is still frontend-placeholder based.
+* Shared trip permissions UI is functional.
+* Friends backend is still frontend-placeholder based. 
+* PostgreSQL is required for the project to work correctly.
