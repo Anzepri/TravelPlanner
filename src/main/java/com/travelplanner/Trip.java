@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Trip {
 
+    private int tripId;
     private String name;
     private String destination;
     private String startDate;
@@ -18,6 +19,14 @@ public class Trip {
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public int getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(int tripId) {
+        this.tripId = tripId;
     }
 
     public String getName() { return name; }
