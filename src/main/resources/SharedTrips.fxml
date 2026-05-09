@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="650.0"
+            prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.travelplanner.SharedTripsController">
+
+    <children>
+
+        <Label text="Shared Trips"
+               layoutX="380"
+               layoutY="20"
+               style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+        <Button text="Back"
+                layoutX="20"
+                layoutY="20"
+                prefWidth="80"
+                onAction="#goBack"/>
+
+        <!-- SHARED WITH ME -->
+
+        <Label text="Shared With Me"
+               layoutX="60"
+               layoutY="90"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="sharedWithMeListView"
+                  layoutX="60"
+                  layoutY="130"
+                  prefWidth="380"
+                  prefHeight="380"/>
+
+        <Button text="Open Selected Trip"
+                layoutX="60"
+                layoutY="540"
+                prefWidth="180"
+                onAction="#openSharedTrip"/>
+
+        <!-- TRIPS I SHARED -->
+
+        <Label text="Trips I Shared"
+               layoutX="560"
+               layoutY="90"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="sharedByMeListView"
+                  layoutX="560"
+                  layoutY="130"
+                  prefWidth="380"
+                  prefHeight="380"/>
+
+        <Button text="Manage Sharing"
+                layoutX="560"
+                layoutY="540"
+                prefWidth="180"
+                onAction="#manageSharedTrip"/>
+
+    </children>
+
+</AnchorPane>

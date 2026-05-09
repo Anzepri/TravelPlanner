@@ -13,12 +13,18 @@
     </padding>
     <!-- Title -->
     <Label text="Travel Planner Dashboard"
-           style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+        style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+        <Label fx:id="uidLabel"
+        text="UID: " layoutX="20" layoutY="20"
+        style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        
 
     <!-- Trip List -->
     <ListView fx:id="tripListView"
               prefHeight="300"
               prefWidth="400" />
+
+
 
     <!-- Buttons -->
     <HBox spacing="15" alignment="CENTER">
@@ -32,9 +38,9 @@
                 text="Manage Users"
                 prefWidth="150"
                 onAction="#goToUserManagement"/>
-        <Button text="Logout"
+        <Button text="Back"
                 prefWidth="150"
-                onAction="#handleLogout"/>
+                onAction="#goBackToMainDashboard"/>
     </HBox>
 
 </VBox>

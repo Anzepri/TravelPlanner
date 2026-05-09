@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0"
+            prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.travelplanner.FriendsController">
+
+    <children>
+
+        <Label text="Friends"
+               layoutX="380"
+               layoutY="20"
+               style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+        <Button text="Back"
+                layoutX="20"
+                layoutY="20"
+                onAction="#goBack"/>
+
+        <Label text="Add Friend by UID:"
+               layoutX="40"
+               layoutY="90"/>
+
+        <TextField fx:id="uidField"
+                   layoutX="40"
+                   layoutY="120"
+                   prefWidth="200"/>
+
+        <Button text="Send Request"
+                layoutX="260"
+                layoutY="120"
+                onAction="#sendFriendRequest"/>
+
+        <Label text="Incoming Requests"
+               layoutX="40"
+               layoutY="180"
+               style="-fx-font-size: 18px;" />
+
+        <ListView fx:id="requestsListView"
+                  layoutX="40"
+                  layoutY="220"
+                  prefWidth="300"
+                  prefHeight="250"/>
+
+        <Button text="Accept Selected"
+                layoutX="40"
+                layoutY="490"
+                onAction="#acceptRequest"/>
+
+        <Label text="Friends List"
+               layoutX="500"
+               layoutY="180"
+               style="-fx-font-size: 18px;" />
+
+        <ListView fx:id="friendsListView"
+                  layoutX="500"
+                  layoutY="220"
+                  prefWidth="300"
+                  prefHeight="250"/>
+
+    </children>
+
+</AnchorPane>

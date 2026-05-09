@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -14,7 +15,9 @@ public class DashboardController {
 
     @FXML
     private Button manageUsersButton;
-
+    
+    @FXML
+    private Label uidLabel;
     
     @FXML
     public void initialize() {
@@ -38,8 +41,11 @@ public class DashboardController {
                 }
             }
         });
+        String uid =
+        UserManager.getUID(CurrentUser.getEmail());
+        uidLabel.setText("UID: " + uid);
     }
-
+    
    
    private void refreshTrips() {
         tripListView.getItems().clear();
@@ -68,6 +74,9 @@ public class DashboardController {
 
             TripDetailsController controller = loader.getController();
             controller.setTrip(trip);
+            controller.setReturnPage(
+            "/Dashboard.fxml"
+            );
 
             Stage stage = (Stage) tripListView.getScene().getWindow();
             stage.getScene().setRoot(root);
@@ -115,17 +124,37 @@ public class DashboardController {
         }
     }
     
+    @FXML
+    private void goBackToMainDashboard() {
+    try {
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/MainDashboard.fxml"
+                        )
+                );
+
+        Stage stage =
+                (Stage) tripListView
+                        .getScene()
+                        .getWindow();
+
+        stage.getScene().setRoot(loader.load());
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }
+
+    
     
     @FXML
     private void handleDeleteTrip() {
-
     Trip selected = tripListView.getSelectionModel().getSelectedItem();
-
     if (selected == null) {
         System.out.println("No trip selected");
         return;
     }
-
     javafx.scene.control.Alert alert =
             new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
 
@@ -134,36 +163,12 @@ public class DashboardController {
     alert.setContentText("Are you sure you want to delete this trip?");
 
     java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-
     if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.OK) {
-
+        
         TripManager.deleteTrip(selected);
         refreshTrips();
 
         System.out.println("Deleted trip: " + selected.getName());
     }
     }
-
-
-   
-    @FXML
-    private void handleLogout(javafx.event.ActionEvent event) {
-
-        CurrentUser.setEmail(null);
-
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/Login.fxml")
-            );
-
-            Stage stage = (Stage) ((Node) event.getSource())
-                    .getScene().getWindow();
-
-            stage.getScene().setRoot(loader.load());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

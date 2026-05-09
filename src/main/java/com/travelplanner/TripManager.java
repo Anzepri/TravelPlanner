@@ -186,6 +186,26 @@ public class TripManager {
         }
     }
 
+    public static void deleteItineraryItem(int itemId) {
+    String sql = "DELETE FROM itinerary_items WHERE item_id = ?";
+    try (
+            Connection conn =
+                    DatabaseConnection.getConnection();
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(sql)
+    ) {
+        stmt.setInt(1, itemId);
+        stmt.executeUpdate();
+
+    } catch (SQLException e) {
+        System.out.println(
+                "Failed to delete itinerary item: "
+                        + e.getMessage()
+        );
+    }
+    }
+
     private static void loadItineraryForTrip(Trip trip) {
         String sql = """
                 SELECT item_id, title, item_date, item_time, location

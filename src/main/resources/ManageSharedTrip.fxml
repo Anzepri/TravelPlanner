@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="650.0"
+            prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.travelplanner.ManageSharedTripController">
+
+    <children>
+
+        <Label fx:id="tripTitleLabel"
+               text="Manage Shared Trip"
+               layoutX="320"
+               layoutY="20"
+               style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+        <Button text="Back"
+                layoutX="20"
+                layoutY="20"
+                prefWidth="80"
+                onAction="#goBack"/>
+
+        <!-- SHARE BY UID -->
+
+        <Label text="Share With UID:"
+               layoutX="60"
+               layoutY="110"
+               style="-fx-font-size: 16px;" />
+
+        <TextField fx:id="uidField"
+                   layoutX="60"
+                   layoutY="145"
+                   prefWidth="220" />
+
+        <ComboBox fx:id="permissionBox"
+                  layoutX="300"
+                  layoutY="145"
+                  prefWidth="160" />
+
+        <Button text="Share Trip"
+                layoutX="490"
+                layoutY="145"
+                prefWidth="140"
+                onAction="#shareTrip"/>
+
+        <!-- CURRENT SHARES -->
+
+        <Label text="Currently Shared With"
+               layoutX="60"
+               layoutY="240"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="sharedUsersListView"
+                  layoutX="60"
+                  layoutY="285"
+                  prefWidth="600"
+                  prefHeight="260" />
+
+        <Button text="Toggle Permission"
+                layoutX="700"
+                layoutY="320"
+                prefWidth="180"
+                onAction="#togglePermission"/>
+
+        <Button text="Remove Access"
+                layoutX="700"
+                layoutY="390"
+                prefWidth="180"
+                onAction="#removeAccess"/>
+
+    </children>
+
+</AnchorPane>

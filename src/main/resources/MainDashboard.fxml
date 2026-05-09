@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0"
+            prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.travelplanner.MainDashboardController">
+
+    <children>
+
+        <Label text="Travel Planner"
+               layoutX="330"
+               layoutY="40"
+               style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+        <Label fx:id="emailLabel"
+               layoutX="30"
+               layoutY="30"
+               style="-fx-font-size: 14px;" />
+
+        <Label fx:id="uidLabel"
+               layoutX="30"
+               layoutY="55"
+               style="-fx-font-size: 14px;" />
+
+        <Button text="Your Trips"
+                layoutX="320"
+                layoutY="180"
+                prefWidth="250"
+                prefHeight="60"
+                onAction="#openTrips" />
+
+        <Button text="Friends"
+                layoutX="320"
+                layoutY="280"
+                prefWidth="250"
+                prefHeight="60"
+                onAction="#openFriends" />
+
+        <Button text="Shared Trips"
+                layoutX="320"
+                layoutY="380"
+                prefWidth="250"
+                prefHeight="60"
+                onAction="#openSharedTrips" />
+        <Button text="Logout"
+                layoutX="780"
+                layoutY="20"
+                prefWidth="90"
+                onAction="#handleLogout"/>
+
+    </children>
+
+</AnchorPane>

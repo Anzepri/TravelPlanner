@@ -9,37 +9,30 @@ import java.sql.SQLException;
 import java.util.HexFormat;
 
 public class UserManager {
-
-   
     public static java.util.Map<String, String> getUsersWithRoles() {
 
     java.util.Map<String, String> users = new java.util.HashMap<>();
 
     String sql = "SELECT username, role FROM users";
 
-    try (
-        Connection conn = DatabaseConnection.getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery()
-    ) {
-
+        ResultSet rs = stmt.executeQuery()) 
+        {
         while (rs.next()) {
             users.put(
                     rs.getString("username"),
-                    rs.getString("role")
-            );
+                    rs.getString("role"));}
         }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+        catch (SQLException e) {e.printStackTrace();
+        }
 
     return users;
     }
+
+
     public static boolean updateRole(String email, String role) {
-
     String sql = "UPDATE users SET role = ? WHERE username = ?";
-
     try (
         Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)
@@ -81,26 +74,79 @@ public class UserManager {
         return input.replace("|", "-").replace(",", " ").trim();
     }
 
+    private static String generateUID() {
+    return "USR" +
+            (10000 + (int)(Math.random() * 90000));
+    }
+
+    public static String getUID(String email) {
+    String sql =
+            "SELECT uid FROM users WHERE username = ?";
+    try (
+            Connection conn = DatabaseConnection.getConnection();
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(sql)
+    ) {
+
+        stmt.setString(1, email);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("uid");
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println(
+                "Failed to get UID: " + e.getMessage()
+        );
+    }
+    return null;
+    }
+
+
     public static boolean register(String email, String password) {
-        if (userExists(email)) {
-            return false;
-        }
 
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    if (userExists(email)) {
+        return false;
+    }
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    // Generate UID
+    String uid = generateUID();
 
-            stmt.setString(1, email);
-            stmt.setString(2, password);
+    // Hash password
+    String hashedPassword = hashPassword(password);
 
-            stmt.executeUpdate();
-            return true;
+    String sql =
+            "INSERT INTO users (username, password, uid) VALUES (?, ?, ?)";
 
-        } catch (SQLException e) {
-            System.out.println("Registration failed: " + e.getMessage());
-            return false;
-        }
+    try (
+            Connection conn = DatabaseConnection.getConnection();
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(sql)
+    ) {
+
+        stmt.setString(1, email);
+
+        stmt.setString(2, hashedPassword);
+
+        stmt.setString(3, uid);
+
+        stmt.executeUpdate();
+
+        return true;
+
+    } catch (SQLException e) {
+
+        System.out.println(
+                "Registration failed: " + e.getMessage()
+        );
+
+        return false;
+    }
     }
 
     public static boolean userExists(String email) {
@@ -121,21 +167,38 @@ public class UserManager {
     }
 
     public static boolean validate(String email, String password) {
-        String sql = "SELECT user_id FROM users WHERE username = ? AND password = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    String sql =
+            "SELECT password FROM users WHERE username = ?";
 
-            stmt.setString(1, email);
-            stmt.setString(2, password);
+    try (
+            Connection conn = DatabaseConnection.getConnection();
 
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
+            PreparedStatement stmt =
+                    conn.prepareStatement(sql)
+    ) {
 
-        } catch (SQLException e) {
-            System.out.println("Login failed: " + e.getMessage());
-            return false;
+        stmt.setString(1, email);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            String storedHash = rs.getString("password");
+
+            return storedHash.equals(
+                    hashPassword(password)
+            );
         }
+
+    } catch (SQLException e) {
+
+        System.out.println(
+                "Login failed: " + e.getMessage()
+        );
+    }
+
+    return false;
     }
 
     public static boolean isWrongPassword(String email, String password) {

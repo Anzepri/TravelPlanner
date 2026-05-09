@@ -50,7 +50,7 @@ public class LoginController {
             CurrentUser.setRole(UserManager.getRole(email));
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainDashboard.fxml"));
                 javafx.scene.Parent root = loader.load();
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.getScene().setRoot(root);

@@ -41,11 +41,22 @@
                    HBox.hgrow="ALWAYS"/>
     </HBox>
 
+    <!-- Permission Label -->
+    <Label fx:id="permissionLabel"
+       style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
+    
     <!-- Buttons -->
     <HBox spacing="10">
-        <Button text="Add" onAction="#addActivity"/>
-        <Button text="Edit" onAction="#editActivity"/>
-        <Button text="Delete" onAction="#deleteActivity"/>
+    <Button fx:id="addButton"
+            text="Add"
+            onAction="#addActivity"/>
+    <Button fx:id="editButton"
+            text="Edit"
+            onAction="#editActivity"/>
+    <Button fx:id="deleteButton"
+            text="Delete"
+            onAction="#deleteActivity"/>
     </HBox>
 
     <!-- List -->
