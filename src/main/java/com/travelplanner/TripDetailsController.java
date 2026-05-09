@@ -77,10 +77,12 @@ public class TripDetailsController {
         if (time == null) { showError("Please select a valid time"); return; }
 
         ItineraryItem item = new ItineraryItem(title, date, time, location);
-        trip.getItinerary().add(item);
-        TripManager.saveTrips();
+
+        TripManager.addItineraryItem(trip, item);
+
         refreshGroupedList();
         clearInputs();
+
     }
 
     @FXML
@@ -106,6 +108,7 @@ public class TripDetailsController {
         trip.getItinerary().remove(selected);
         TripManager.saveTrips();
         refreshGroupedList();
+        
     }
 
     private void refreshGroupedList() {

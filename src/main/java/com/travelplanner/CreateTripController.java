@@ -44,8 +44,7 @@ public class CreateTripController {
         trip.setOwnerEmail(CurrentUser.getEmail());
 
         
-        TripManager.trips.add(trip);
-        TripManager.saveTrips();
+        TripManager.addTrip(trip);
 
         try {
             FXMLLoader loader = new FXMLLoader(

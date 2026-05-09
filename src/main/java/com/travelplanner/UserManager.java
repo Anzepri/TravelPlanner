@@ -1,52 +1,14 @@
 package com.travelplanner;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HexFormat;
-import java.util.Map;
-import java.util.TreeMap;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserManager {
 
-    private static Map<String, String> users = new HashMap<>();
-    private static Map<String, String> roles = new HashMap<>();
-    private static final String FILE = "users.txt";
-
-    private static void ensureFile() {
-        try {
-            File file = new File(FILE);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void loadUsers() {
-        users.clear();
-        roles.clear();
-        ensureFile();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 2) {
-                    users.put(parts[0], parts[1]);
-                    String role = (parts.length == 3) ? parts[2] : "USER";
-                    roles.put(parts[0], role);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Not needed anymore because users are loaded from PostgreSQL.
     }
 
     /**
@@ -72,37 +34,25 @@ public class UserManager {
     }
 
     public static boolean register(String email, String password) {
-        if (users.containsKey(email)) return false;
-
-        String hashedPassword = hashPassword(password);
-        String defaultRole = "USER";
-        
-        users.put(email, hashedPassword);
-        roles.put(email, defaultRole);
-
-        try (FileWriter writer = new FileWriter(FILE, true)) {
-            writer.write(email + "," + hashedPassword + "," + defaultRole + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (userExists(email)) {
+            return false;
         }
-        return true;
-    }
 
-    public static String getRole(String email) {
-        return roles.getOrDefault(email, "USER");
-    }
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
 
-    public static Map<String, String> getUsersWithRoles() {
-        return new TreeMap<>(roles);
-    }
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    public static boolean updateRole(String email, String role) {
-        if (!users.containsKey(email)) return false;
-        if (!"USER".equals(role) && !"TRIP_ADVISOR".equals(role)) return false;
+            stmt.setString(1, email);
+            stmt.setString(2, password);
 
-        roles.put(email, role);
-        saveUsers();
-        return true;
+            stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Registration failed: " + e.getMessage());
+            return false;
+        }
     }
 
     private static void saveUsers() {
@@ -118,18 +68,62 @@ public class UserManager {
     }
 
     public static boolean userExists(String email) {
-        return users.containsKey(email);
+        String sql = "SELECT user_id FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            System.out.println("User check failed: " + e.getMessage());
+            return false;
+        }
     }
 
     public static boolean validate(String email, String password) {
-        if (!users.containsKey(email)) return false;
-        String hashedInput = hashPassword(password);
-        return users.get(email).equals(hashedInput);
+        String sql = "SELECT user_id FROM users WHERE username = ? AND password = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            System.out.println("Login failed: " + e.getMessage());
+            return false;
+        }
     }
 
     public static boolean isWrongPassword(String email, String password) {
-        if (!users.containsKey(email)) return false;
-        String hashedInput = hashPassword(password);
-        return !users.get(email).equals(hashedInput);
+        return userExists(email) && !validate(email, password);
+    }
+
+    public static int getUserIdByEmail(String email) {
+        String sql = "SELECT user_id FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("user_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Failed to get user ID: " + e.getMessage());
+        }
+
+        return -1;
     }
 }

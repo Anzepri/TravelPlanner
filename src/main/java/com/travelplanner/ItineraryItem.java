@@ -1,6 +1,7 @@
 package com.travelplanner;
 
 public class ItineraryItem {
+    private int itemId;
     private String title;
     private String date;
     private String time;
@@ -11,6 +12,14 @@ public class ItineraryItem {
         this.date = date;
         this.time = time;
         this.location = location;
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
     public String getTitle() { return title; }
