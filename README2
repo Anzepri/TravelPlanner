@@ -220,3 +220,4 @@ Then run the project.
 * Shared trip permissions UI is functional.
 * Friends backend is still frontend-placeholder based. 
 * PostgreSQL is required for the project to work correctly.
+* DatabaseTest.java verifies PostgreSQL connectivity.
