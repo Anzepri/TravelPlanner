@@ -9,8 +9,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-    UserManager.loadUsers();
+        
     TripManager.loadTrips();
 
     FXMLLoader loader = new FXMLLoader(
@@ -29,3 +28,4 @@ public class Main extends Application {
         launch();
     }
 }
+

@@ -7,9 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class TripDetailsController {
@@ -67,37 +73,111 @@ public class TripDetailsController {
 
     @FXML
     private void addActivity() {
-        // SANITIZED INPUTS
+
         String title = UserManager.sanitize(activityField.getText());
         String location = UserManager.sanitize(locationField.getText());
-        String date = String.valueOf(datePicker.getValue());
+
+        LocalDate activityDate = datePicker.getValue();
+
         String time = getSelectedTime();
 
-        if (title.isEmpty()) { showError("Activity name is required"); return; }
-        if (time == null) { showError("Please select a valid time"); return; }
+        if (title.isEmpty()) {
+        showError("Activity name is required");
+        return;
+        }
 
-        ItineraryItem item = new ItineraryItem(title, date, time, location);
+        if (activityDate == null) {
+        showError("Please select a date");
+        return;
+        }
 
-        TripManager.addItineraryItem(trip, item);
+        if (time == null) {
+        showError("Please select a valid time");
+        return;
+        }
 
-        refreshGroupedList();
-        clearInputs();
 
+    LocalDate tripStart = LocalDate.parse(trip.getStartDate());
+    LocalDate tripEnd = LocalDate.parse(trip.getEndDate());
+
+    if (activityDate.isBefore(tripStart)
+            || activityDate.isAfter(tripEnd)) {
+
+        showError(
+                "Activity date must be within the trip duration."
+        );
+
+        return;
+    }
+
+    ItineraryItem item = new ItineraryItem(
+            title,
+            activityDate.toString(),
+            time,
+            location
+    );
+
+    TripManager.addItineraryItem(trip, item);
+
+    refreshGroupedList();
+    clearInputs();
     }
 
     @FXML
     private void editActivity() {
-        ItineraryItem selected = itineraryListView.getSelectionModel().getSelectedItem();
-        if (selected == null || selected.getTitle().startsWith("===")) return;
-        String time = getSelectedTime();
-        if (time == null) { showError("Please select a valid time"); return; }
 
-        selected.setTitle(UserManager.sanitize(activityField.getText()));
-        selected.setDate(String.valueOf(datePicker.getValue()));
+        ItineraryItem selected =
+                itineraryListView.getSelectionModel().getSelectedItem();
+
+        if (selected == null
+                || selected.getTitle().startsWith("===")) {
+            return;
+        }
+
+        LocalDate activityDate = datePicker.getValue();
+
+        String time = getSelectedTime();
+
+        if (activityDate == null) {
+            showError("Please select a date");
+            return;
+        }
+
+        if (time == null) {
+            showError("Please select a valid time");
+            return;
+        }
+
+        LocalDate tripStart = LocalDate.parse(trip.getStartDate());
+
+        LocalDate tripEnd = LocalDate.parse(trip.getEndDate());
+
+        if (activityDate.isBefore(tripStart)
+            || activityDate.isAfter(tripEnd)) {
+
+        showError(
+                "Activity date must be within the trip duration."
+        );
+
+        return;
+        }
+
+        selected.setTitle(
+            UserManager.sanitize(activityField.getText())
+        );
+
+        selected.setDate(activityDate.toString());
+
         selected.setTime(time);
-        selected.setLocation(UserManager.sanitize(locationField.getText()));
+
+        selected.setLocation(
+            UserManager.sanitize(locationField.getText())
+        );
+
         TripManager.saveTrips();
+
         refreshGroupedList();
+
         clearInputs();
     }
 

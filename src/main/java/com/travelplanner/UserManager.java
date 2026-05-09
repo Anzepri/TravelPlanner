@@ -1,16 +1,61 @@
 package com.travelplanner;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HexFormat;
 
 public class UserManager {
 
-    public static void loadUsers() {
-        // Not needed anymore because users are loaded from PostgreSQL.
+   
+    public static java.util.Map<String, String> getUsersWithRoles() {
+
+    java.util.Map<String, String> users = new java.util.HashMap<>();
+
+    String sql = "SELECT username, role FROM users";
+
+    try (
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()
+    ) {
+
+        while (rs.next()) {
+            users.put(
+                    rs.getString("username"),
+                    rs.getString("role")
+            );
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 
+    return users;
+    }
+    public static boolean updateRole(String email, String role) {
+
+    String sql = "UPDATE users SET role = ? WHERE username = ?";
+
+    try (
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)
+    ) {
+
+        stmt.setString(1, role);
+        stmt.setString(2, email);
+
+        return stmt.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return false;
+    }
     /**
      * Secures passwords using SHA-256 hashing.
      * Fixed: Use formatHex() for Java 17 compatibility.
@@ -23,6 +68,9 @@ public class UserManager {
         } catch (Exception e) {
             throw new RuntimeException("Error hashing password", e);
         }
+    }
+    public static String getRole(String email) {
+    return "USER"; // Default role for all users
     }
 
     /**
@@ -52,18 +100,6 @@ public class UserManager {
         } catch (SQLException e) {
             System.out.println("Registration failed: " + e.getMessage());
             return false;
-        }
-    }
-
-    private static void saveUsers() {
-        ensureFile();
-
-        try (FileWriter writer = new FileWriter(FILE, false)) {
-            for (String email : new TreeMap<>(users).keySet()) {
-                writer.write(email + "," + users.get(email) + "," + roles.getOrDefault(email, "USER") + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

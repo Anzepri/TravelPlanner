@@ -36,7 +36,6 @@ public class UserManagementController {
     private void refreshUsers() {
         var rows = FXCollections.<UserRoleRow>observableArrayList();
 
-        UserManager.loadUsers();
         UserManager.getUsersWithRoles().forEach((email, role) -> rows.add(new UserRoleRow(email, role)));
 
         userTable.setItems(rows);
