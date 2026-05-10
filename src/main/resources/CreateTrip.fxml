@@ -63,9 +63,17 @@
             </HBox>
         </VBox>
 
-        <Button text="Create Trip"
-                maxWidth="Infinity"
-                styleClass="button-primary"
-                onAction="#handleCreateTrip"/>
+        <HBox spacing="12">
+            <Button text="Back"
+                    maxWidth="Infinity"
+                    HBox.hgrow="ALWAYS"
+                    styleClass="button-secondary"
+                    onAction="#handleBack"/>
+            <Button text="Create Trip"
+                    maxWidth="Infinity"
+                    HBox.hgrow="ALWAYS"
+                    styleClass="button-primary"
+                    onAction="#handleCreateTrip"/>
+        </HBox>
     </VBox>
 </HBox>

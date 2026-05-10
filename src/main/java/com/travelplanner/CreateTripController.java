@@ -97,6 +97,23 @@ public class CreateTripController {
         }
     }
 
+    @FXML
+    private void handleBack(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/Dashboard.fxml")
+            );
+
+            Stage stage = (Stage) ((Node) event.getSource())
+                    .getScene().getWindow();
+
+            stage.getScene().setRoot(loader.load());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
