@@ -1,0 +1,426 @@
+TRAVEL PLANNER - COMPLETE TEST FLOW
+
+========================================================
+1. LOGIN / REGISTER PAGE
+========================================================
+
+REGISTER TESTS
+------------------------
+[ ] Register with valid email/password
+Expected:
+- User account created
+- Redirect/login works
+
+[ ] Register with existing email
+Expected:
+- Registration blocked
+- Error shown
+
+[ ] Register with empty fields
+Expected:
+- Validation error shown
+
+LOGIN TESTS
+------------------------
+[ ] Login with correct credentials
+Expected:
+- Redirect to Main Dashboard
+
+[ ] Login with incorrect password
+Expected:
+- Login blocked
+- Error shown
+
+[ ] Login with non-existing account
+Expected:
+- Login blocked
+
+[ ] Logout
+Expected:
+- Redirect back to Login page
+- CurrentUser cleared
+
+========================================================
+2. MAIN DASHBOARD
+========================================================
+
+GENERAL
+------------------------
+[ ] Email displays correctly
+[ ] UID displays correctly
+[ ] Buttons styled properly
+[ ] Navigation buttons work
+
+BUTTON TESTS
+------------------------
+[ ] Your Trips button
+Expected:
+- Opens Dashboard page
+
+[ ] Friends button
+Expected:
+- Opens Friends page
+
+[ ] Shared Trips button
+Expected:
+- Opens Shared Trips page
+
+[ ] Logout button
+Expected:
+- Returns to Login page
+
+========================================================
+3. DASHBOARD PAGE (YOUR TRIPS)
+========================================================
+
+GENERAL
+------------------------
+[ ] Trip cards load correctly
+[ ] Trip cards display:
+    - Trip Name
+    - Destination
+
+[ ] Trip selection highlight works
+[ ] Double-click opens trip
+
+CREATE TRIP
+------------------------
+[ ] Open Create Trip page
+Expected:
+- Page loads correctly
+
+DELETE TRIP
+------------------------
+[ ] Delete selected trip
+Expected:
+- Trip removed from UI
+- Trip removed from database
+
+[ ] Delete without selecting trip
+Expected:
+- Nothing crashes
+
+BACK BUTTON
+------------------------
+[ ] Back button
+Expected:
+- Returns to Main Dashboard
+
+========================================================
+4. CREATE TRIP PAGE
+========================================================
+
+VALIDATION TESTS
+------------------------
+[ ] Empty trip name
+Expected:
+- Validation error
+
+[ ] Empty destination
+Expected:
+- Validation error
+
+[ ] Missing start date
+Expected:
+- Validation error
+
+[ ] Missing end date
+Expected:
+- Validation error
+
+VALID CREATE TRIP
+------------------------
+[ ] Create valid trip
+Expected:
+- Trip appears on Dashboard
+- Trip saved to PostgreSQL
+- Owner email saved correctly
+
+BACK BUTTON
+------------------------
+[ ] Back button
+Expected:
+- Returns to Dashboard
+
+========================================================
+5. TRIP DETAILS PAGE
+========================================================
+
+GENERAL
+------------------------
+[ ] Trip title displays
+[ ] Destination displays
+[ ] Start date displays
+[ ] End date displays
+[ ] Permission label displays
+
+ACTIVITY CREATION
+------------------------
+[ ] Add valid activity
+Expected:
+- Activity added
+- Activity saved to database
+
+[ ] Add activity without title
+Expected:
+- Validation error
+
+[ ] Add activity without date
+Expected:
+- Validation error
+
+[ ] Add activity without time
+Expected:
+- Validation error
+
+DATE VALIDATION
+------------------------
+[ ] Add activity BEFORE trip start date
+Expected:
+- Blocked
+
+[ ] Add activity AFTER trip end date
+Expected:
+- Blocked
+
+EDIT ACTIVITY
+------------------------
+[ ] Edit activity successfully
+Expected:
+- Changes persist
+- Database updates
+
+DELETE ACTIVITY
+------------------------
+[ ] Delete activity
+Expected:
+- Removed from UI
+- Removed from database
+
+GROUPING
+------------------------
+[ ] Activities grouped by date
+[ ] Activities sorted by time
+
+BACK BUTTON
+------------------------
+[ ] Back button
+Expected:
+- Returns to correct page
+
+========================================================
+6. FRIENDS PAGE
+========================================================
+
+SEND REQUEST
+------------------------
+[ ] Send request using valid numbers only
+Example:
+12345
+
+Expected:
+- App converts to:
+  USR12345
+- Request sent successfully
+
+INPUT VALIDATION
+------------------------
+[ ] Enter letters
+Example:
+abc
+
+Expected:
+- Error shown
+
+[ ] Enter symbols
+Example:
+!!!
+
+Expected:
+- Error shown
+
+[ ] Enter full UID manually
+Example:
+USR12345
+
+Expected:
+- Error shown
+
+INCOMING REQUESTS
+------------------------
+[ ] Incoming requests load correctly
+
+ACCEPT REQUEST
+------------------------
+[ ] Accept selected request
+Expected:
+- Friend added to friends list
+- Database updated
+
+FRIENDS LIST
+------------------------
+[ ] Friends load correctly after relogging
+
+BACK BUTTON
+------------------------
+[ ] Back button
+Expected:
+- Returns to Main Dashboard
+
+========================================================
+7. SHARED TRIPS PAGE
+========================================================
+
+SHARED WITH ME
+------------------------
+[ ] Shared trips load correctly
+[ ] Permission text displays:
+    - CAN EDIT
+    - VIEW ONLY
+
+OPEN SHARED TRIP
+------------------------
+[ ] Open shared trip
+Expected:
+- Trip loads correctly
+
+VIEW ONLY MODE
+------------------------
+[ ] Shared VIEW ONLY trip
+Expected:
+- Add/Edit/Delete disabled
+
+EDIT MODE
+------------------------
+[ ] Shared CAN EDIT trip
+Expected:
+- Add/Edit/Delete enabled
+
+TRIPS I SHARED
+------------------------
+[ ] Trips I Shared loads correctly
+[ ] Shared users display correctly
+[ ] Permission text persists after relogin
+
+BACK BUTTON
+------------------------
+[ ] Back button
+Expected:
+- Returns to Main Dashboard
+
+========================================================
+8. MANAGE SHARING PAGE
+========================================================
+
+GENERAL
+------------------------
+[ ] Correct trip title displays
+[ ] Current shared users load
+
+SHARE TRIP
+------------------------
+[ ] Share trip with friend UID
+Expected:
+- User added to shared list
+- Database updated
+
+PERMISSIONS
+------------------------
+[ ] Share with VIEW ONLY
+Expected:
+- Other user cannot edit
+
+[ ] Share with CAN EDIT
+Expected:
+- Other user can edit
+
+TOGGLE PERMISSION
+------------------------
+[ ] Toggle permission
+Expected:
+- Permission updates immediately
+- Persists after relogging
+
+REMOVE ACCESS
+------------------------
+[ ] Remove shared access
+Expected:
+- User loses access
+- Trip disappears from Shared With Me
+
+BACK BUTTON
+------------------------
+[ ] Back button
+Expected:
+- Returns to Dashboard
+
+========================================================
+9. DATABASE PERSISTENCE TESTS
+========================================================
+
+TRIPS
+------------------------
+[ ] Trips persist after app restart
+
+ITINERARY
+------------------------
+[ ] Activities persist after app restart
+
+FRIENDS
+------------------------
+[ ] Friends persist after relogging
+
+SHARING
+------------------------
+[ ] Shared trips persist after relogging
+
+PERMISSIONS
+------------------------
+[ ] Permissions persist after relogging
+
+========================================================
+10. FINAL UI TESTS
+========================================================
+
+[ ] No broken pages
+[ ] No overlapping UI
+[ ] Buttons styled consistently
+[ ] ListViews styled consistently
+[ ] Navigation works everywhere
+[ ] No console exceptions
+[ ] No NullPointerExceptions
+[ ] No DateTimeParseExceptions
+
+========================================================
+11. MULTI-USER COLLABORATION TEST
+========================================================
+
+USER 1
+------------------------
+[ ] Create trip
+[ ] Add USER 2 as friend
+[ ] Share trip with USER 2
+
+USER 2
+------------------------
+[ ] Accept friend request
+[ ] Open Shared Trips
+[ ] Verify trip appears
+
+VIEW ONLY TEST
+------------------------
+[ ] USER 2 cannot edit
+
+CAN EDIT TEST
+------------------------
+[ ] USER 2 can add/edit/delete activities
+
+REMOVE ACCESS TEST
+------------------------
+[ ] USER 1 removes USER 2 access
+Expected:
+- Trip disappears for USER 2
+
+========================================================
+END OF TEST FLOW
+========================================================
