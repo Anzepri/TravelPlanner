@@ -1,0 +1,398 @@
+1. LOGIN / REGISTER PAGE
+
+1.01 REGISTER TESTS
+
+- Register with valid email/password
+Expected:
+- User account created
+- Redirect/login works
+
+- Register with existing email
+Expected:
+- Registration blocked
+- Error shown
+
+- Register with empty fields
+Expected:
+- Validation error shown
+
+1.02 LOGIN TESTS
+
+- Login with correct credentials
+Expected:
+- Redirect to Main Dashboard
+
+- Login with incorrect password
+Expected:
+- Login blocked
+- Error shown
+
+- Login with non-existing account
+Expected:
+- Login blocked
+
+- Logout
+Expected:
+- Redirect back to Login page
+- CurrentUser cleared
+
+2. MAIN DASHBOARD
+
+2.01 GENERAL
+
+- Email displays correctly
+- UID displays correctly
+- Buttons styled properly
+- Navigation buttons work
+
+2.02 BUTTON TESTS
+
+- Your Trips button
+Expected:
+- Opens Dashboard page
+
+- Friends button
+Expected:
+- Opens Friends page
+
+- Shared Trips button
+Expected:
+- Opens Shared Trips page
+
+- Logout button
+Expected:
+- Returns to Login page
+
+3. DASHBOARD PAGE (YOUR TRIPS)
+
+3.01 GENERAL
+
+- Trip cards load correctly
+- Trip cards display:
+- Trip Name
+- Destination
+
+- Trip selection highlight works
+- Double-click opens trip
+
+3.02 CREATE TRIP
+
+- Open Create Trip page
+Expected:
+- Page loads correctly
+
+3.03 DELETE TRIP
+
+- Delete selected trip
+Expected:
+- Trip removed from UI
+- Trip removed from database
+
+- Delete without selecting trip
+Expected:
+- Nothing crashes
+
+3.04 BACK BUTTON
+
+- Back button
+Expected:
+- Returns to Main Dashboard
+
+4. CREATE TRIP PAGE
+
+4.01 VALIDATION TESTS
+
+- Empty trip name
+Expected:
+- Validation error
+
+- Empty destination
+Expected:
+- Validation error
+
+- Missing start date
+Expected:
+- Validation error
+
+- Missing end date
+Expected:
+- Validation error
+
+4.02 VALID CREATE TRIP
+
+- Create valid trip
+Expected:
+- Trip appears on Dashboard
+- Trip saved to PostgreSQL
+- Owner email saved correctly
+
+4.03 BACK BUTTON
+
+- Back button
+Expected:
+- Returns to Dashboard
+
+5. TRIP DETAILS PAGE
+
+5.01 GENERAL
+
+- Trip title displays
+- Destination displays
+- Start date displays
+- End date displays
+- Permission label displays
+
+5.02 ACTIVITY CREATION
+
+- Add valid activity
+Expected:
+- Activity added
+- Activity saved to database
+
+- Add activity without title
+Expected:
+- Validation error
+
+- Add activity without date
+Expected:
+- Validation error
+
+- Add activity without time
+Expected:
+- Validation error
+
+5.03 DATE VALIDATION
+
+- Add activity BEFORE trip start date
+Expected:
+- Blocked
+
+- Add activity AFTER trip end date
+Expected:
+- Blocked
+
+5.04 EDIT ACTIVITY
+
+- Edit activity successfully
+Expected:
+- Changes persist
+- Database updates
+
+5.05 DELETE ACTIVITY
+
+- Delete activity
+Expected:
+- Removed from UI
+- Removed from database
+
+5.06 GROUPING
+
+- Activities grouped by date
+- Activities sorted by time
+
+5.07 BACK BUTTON
+
+- Back button
+Expected:
+- Returns to correct page
+
+6. FRIENDS PAGE
+
+6.01 SEND REQUEST
+
+- Send request using valid numbers only
+Example:
+12345
+
+Expected:
+- App converts to:
+USR12345
+- Request sent successfully
+
+6.02 INPUT VALIDATION
+
+- Enter letters
+Example:
+abc
+
+Expected:
+- Error shown
+
+- Enter symbols
+Example:
+!!!
+
+Expected:
+- Error shown
+
+- Enter full UID manually
+Example:
+USR12345
+
+Expected:
+- Error shown
+
+6.03 INCOMING REQUESTS
+
+- Incoming requests load correctly
+
+6.04 ACCEPT REQUEST
+
+- Accept selected request
+Expected:
+- Friend added to friends list
+- Database updated
+
+6.05 FRIENDS LIST
+
+- Friends load correctly after relogging
+
+6.06 BACK BUTTON
+
+- Back button
+Expected:
+- Returns to Main Dashboard
+
+7. SHARED TRIPS PAGE
+
+7.01 SHARED WITH ME
+
+- Shared trips load correctly
+- Permission text displays:
+- CAN EDIT
+- VIEW ONLY
+
+7.02 OPEN SHARED TRIP
+
+- Open shared trip
+Expected:
+- Trip loads correctly
+
+7.03 VIEW ONLY MODE
+
+- Shared VIEW ONLY trip
+Expected:
+- Add/Edit/Delete disabled
+
+7.04 EDIT MODE
+
+- Shared CAN EDIT trip
+Expected:
+- Add/Edit/Delete enabled
+
+7.05 TRIPS I SHARED
+
+- Trips I Shared loads correctly
+- Shared users display correctly
+- Permission text persists after relogin
+
+7.06 BACK BUTTON
+
+- Back button
+Expected:
+- Returns to Main Dashboard
+
+8. MANAGE SHARING PAGE
+
+8.01 GENERAL
+
+- Correct trip title displays
+- Current shared users load
+
+8.02 SHARE TRIP
+
+- Share trip with friend UID
+Expected:
+- User added to shared list
+- Database updated
+
+8.03 PERMISSIONS
+
+- Share with VIEW ONLY
+Expected:
+- Other user cannot edit
+
+- Share with CAN EDIT
+Expected:
+- Other user can edit
+
+8.04 TOGGLE PERMISSION
+
+- Toggle permission
+Expected:
+- Permission updates immediately
+- Persists after relogging
+
+8.05 REMOVE ACCESS
+
+- Remove shared access
+Expected:
+- User loses access
+- Trip disappears from Shared With Me
+
+8.06 BACK BUTTON
+
+- Back button
+Expected:
+- Returns to Dashboard
+
+9. DATABASE PERSISTENCE TESTS
+
+9.01 TRIPS
+
+- Trips persist after app restart
+
+9.02 ITINERARY
+
+- Activities persist after app restart
+
+9.03 FRIENDS
+
+- Friends persist after relogging
+
+9.04 SHARING
+
+- Shared trips persist after relogging
+
+9.05 PERMISSIONS
+
+- Permissions persist after relogging
+
+10. FINAL UI TESTS
+
+- No broken pages
+- No overlapping UI
+- Buttons styled consistently
+- ListViews styled consistently
+- Navigation works everywhere
+- No console exceptions
+- No NullPointerExceptions
+- No DateTimeParseExceptions
+
+11. MULTI-USER COLLABORATION TEST
+
+11.01 USER 1
+
+- Create trip
+- Add USER 2 as friend
+- Share trip with USER 2
+
+11.02 USER 2
+
+- Accept friend request
+- Open Shared Trips
+- Verify trip appears
+
+11.03 VIEW ONLY TEST
+
+- USER 2 cannot edit
+
+11.04 CAN EDIT TEST
+
+- USER 2 can add/edit/delete activities
+
+11.05 REMOVE ACCESS TEST
+
+- USER 1 removes USER 2 access
+Expected:
+- Trip disappears for USER 2

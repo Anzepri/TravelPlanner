@@ -26,6 +26,7 @@
             <Label fx:id="destinationLabel" styleClass="details-meta-pill"/>
             <Label fx:id="startDateLabel" styleClass="details-meta-pill"/>
             <Label fx:id="endDateLabel" styleClass="details-meta-pill"/>
+            <Label fx:id="permissionLabel" styleClass="details-meta-pill"/>
         </HBox>
     </VBox>
 
@@ -38,20 +39,17 @@
                         HBox.hgrow="ALWAYS"
                         maxWidth="Infinity"
                         styleClass="form-date-picker"/>
-
             <TextField fx:id="activityField"
                        promptText="Activity"
                        HBox.hgrow="ALWAYS"
                        maxWidth="Infinity"
                        styleClass="login-input"/>
-
             <HBox spacing="6" alignment="CENTER" styleClass="time-picker-group">
                 <ComboBox fx:id="hourBox" prefWidth="74" styleClass="form-combo-box"/>
                 <Label text=":" styleClass="time-separator"/>
                 <ComboBox fx:id="minuteBox" prefWidth="74" styleClass="form-combo-box"/>
                 <ComboBox fx:id="ampmBox" prefWidth="82" styleClass="form-combo-box"/>
             </HBox>
-
             <TextField fx:id="locationField"
                        promptText="Location"
                        HBox.hgrow="ALWAYS"
@@ -60,9 +58,21 @@
         </HBox>
 
         <HBox spacing="10">
-            <Button text="Add" prefWidth="110" styleClass="button-primary" onAction="#addActivity"/>
-            <Button text="Edit" prefWidth="110" styleClass="button-secondary" onAction="#editActivity"/>
-            <Button text="Delete" prefWidth="110" styleClass="button-danger" onAction="#deleteActivity"/>
+            <Button fx:id="addButton"
+                    text="Add"
+                    prefWidth="110"
+                    styleClass="button-primary"
+                    onAction="#addActivity"/>
+            <Button fx:id="editButton"
+                    text="Edit"
+                    prefWidth="110"
+                    styleClass="button-secondary"
+                    onAction="#editActivity"/>
+            <Button fx:id="deleteButton"
+                    text="Delete"
+                    prefWidth="110"
+                    styleClass="button-danger"
+                    onAction="#deleteActivity"/>
         </HBox>
     </VBox>
 
@@ -74,5 +84,4 @@
             prefWidth="110"
             styleClass="button-secondary"
             onAction="#goBack"/>
-
 </VBox>

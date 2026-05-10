@@ -1,5 +1,7 @@
 package com.travelplanner;
 
+import java.time.LocalDate;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,19 +11,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.time.LocalDate;
-
 public class CreateTripController {
 
     @FXML
     private TextField nameField;
-
     @FXML
     private TextField destinationField;
-
     @FXML
     private DatePicker startDatePicker;
-
     @FXML
     private DatePicker endDatePicker;
 
@@ -53,62 +50,48 @@ public class CreateTripController {
 
     @FXML
     private void handleCreateTrip(javafx.event.ActionEvent event) {
+        String name = nameField.getText().trim();
+        String destination = destinationField.getText().trim();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
 
-        String name = nameField.getText();
-        String destination = destinationField.getText();
-        LocalDate startDateValue = startDatePicker.getValue();
-        LocalDate endDateValue = endDatePicker.getValue();
-
-        
-        if (name.isEmpty() || destination.isEmpty() ||
-            startDateValue == null || endDateValue == null) {
-
-            showError("Please fill in all fields");
+        if (name.isEmpty() || destination.isEmpty()
+                || startDate == null || endDate == null) {
+            showError("Please fill in all fields.");
             return;
         }
 
-        if (endDateValue.isBefore(startDateValue)) {
+        if (endDate.isBefore(startDate)) {
             showError("End date cannot be before start date.");
             return;
         }
 
-        
-        Trip trip = new Trip(name, destination, startDateValue.toString(), endDateValue.toString());
-
-        
+        Trip trip = new Trip(
+                name,
+                destination,
+                startDate.toString(),
+                endDate.toString()
+        );
         trip.setOwnerEmail(CurrentUser.getEmail());
-
-        
         TripManager.addTrip(trip);
 
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/Dashboard.fxml")
-            );
-
-            Stage stage = (Stage) ((Node) event.getSource())
-                    .getScene().getWindow();
-
-            
-            stage.getScene().setRoot(loader.load());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadDashboard(event);
     }
 
     @FXML
     private void handleBack(javafx.event.ActionEvent event) {
+        loadDashboard(event);
+    }
+
+    private void loadDashboard(javafx.event.ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/Dashboard.fxml")
             );
-
             Stage stage = (Stage) ((Node) event.getSource())
-                    .getScene().getWindow();
-
+                    .getScene()
+                    .getWindow();
             stage.getScene().setRoot(loader.load());
-
         } catch (Exception e) {
             e.printStackTrace();
         }

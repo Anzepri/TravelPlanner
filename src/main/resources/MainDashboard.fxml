@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER"
+      spacing="30"
+      styleClass="dashboard-container"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.travelplanner.MainDashboardController"
+      stylesheets="@style.css">
+
+    <padding>
+        <Insets top="45"
+                 right="45"
+                 bottom="45"
+                 left="45"/>
+    </padding>
+
+    <!-- HEADER -->
+
+    <VBox alignment="CENTER"
+          spacing="10">
+
+        <Label text="Your Travel Hub"
+               styleClass="dashboard-title"/>
+
+        <Label text="Manage trips, collaborate with friends, and explore shared itineraries."
+               styleClass="dashboard-subtitle"
+               wrapText="true"/>
+
+    </VBox>
+
+    <!-- USER INFO CARD -->
+
+    <VBox alignment="CENTER_LEFT"
+          spacing="10"
+          maxWidth="500"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 24;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
+
+        <Label fx:id="emailLabel"
+               styleClass="dashboard-subtitle"/>
+
+        <Label fx:id="uidLabel"
+               styleClass="dashboard-subtitle"/>
+
+    </VBox>
+
+    <!-- MAIN NAVIGATION -->
+
+    <FlowPane hgap="24"
+              vgap="24"
+              alignment="CENTER">
+
+        <!-- YOUR TRIPS -->
+
+        <StackPane prefWidth="240"
+                   prefHeight="180"
+                   styleClass="trip-card">
+
+            <VBox alignment="CENTER"
+                  spacing="18">
+
+                <Label text="Your Trips"
+                       styleClass="trip-name"/>
+
+                <Label text="Create, manage, and organize your travel plans."
+                       styleClass="trip-destination"
+                       wrapText="true"
+                       maxWidth="180"
+                       alignment="CENTER"/>
+
+                <Button text="Open"
+                        prefWidth="140"
+                        styleClass="button-primary"
+                        onAction="#openTrips"/>
+
+            </VBox>
+
+        </StackPane>
+
+        <!-- FRIENDS -->
+
+        <StackPane prefWidth="240"
+                   prefHeight="180"
+                   styleClass="trip-card">
+
+            <VBox alignment="CENTER"
+                  spacing="18">
+
+                <Label text="Friends"
+                       styleClass="trip-name"/>
+
+                <Label text="Manage requests, connections, and collaborators."
+                       styleClass="trip-destination"
+                       wrapText="true"
+                       maxWidth="180"
+                       alignment="CENTER"/>
+
+                <Button text="Open"
+                        prefWidth="140"
+                        styleClass="button-secondary"
+                        onAction="#openFriends"/>
+
+            </VBox>
+
+        </StackPane>
+
+        <!-- SHARED TRIPS -->
+
+        <StackPane prefWidth="240"
+                   prefHeight="180"
+                   styleClass="trip-card">
+
+            <VBox alignment="CENTER"
+                  spacing="18">
+
+                <Label text="Shared Trips"
+                       styleClass="trip-name"/>
+
+                <Label text="Access trips shared with you and collaborate together."
+                       styleClass="trip-destination"
+                       wrapText="true"
+                       maxWidth="180"
+                       alignment="CENTER"/>
+
+                <Button text="Open"
+                        prefWidth="140"
+                        styleClass="button-secondary"
+                        onAction="#openSharedTrips"/>
+
+            </VBox>
+
+        </StackPane>
+
+    </FlowPane>
+
+    <!-- LOGOUT -->
+
+    <Button text="Logout"
+            prefWidth="180"
+            styleClass="button-danger"
+            onAction="#handleLogout"/>
+
+</VBox>

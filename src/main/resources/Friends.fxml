@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox spacing="28"
+      alignment="TOP_CENTER"
+      styleClass="dashboard-container"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.travelplanner.FriendsController"
+      stylesheets="@style.css">
+
+    <padding>
+        <Insets top="35"
+                 right="35"
+                 bottom="35"
+                 left="35"/>
+    </padding>
+
+    <!-- LEFT COLUMN -->
+
+    <VBox spacing="22"
+          HBox.hgrow="ALWAYS"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 28;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
+
+        <!-- HEADER -->
+
+        <VBox spacing="6">
+
+            <Label text="Add Friends"
+                   styleClass="dashboard-title"/>
+
+            <Label text="Connect with users by sharing their UID."
+                   styleClass="dashboard-subtitle"/>
+
+        </VBox>
+
+        <!-- ADD FRIEND -->
+
+        <VBox spacing="12">
+
+            <TextField fx:id="uidField"
+                       promptText="Example: 12345"
+                       maxWidth="Infinity"
+                       styleClass="login-input"/>
+              <Label text="USR is added automatically"
+                     styleClass="dashboard-subtitle"/>
+
+            <Button text="Send Request"
+                    prefWidth="170"
+                    styleClass="button-primary"
+                    onAction="#sendFriendRequest"/>
+
+        </VBox>
+
+        <!-- REQUESTS -->
+
+        <VBox spacing="12"
+              VBox.vgrow="ALWAYS">
+
+            <Label text="Incoming Requests"
+                   styleClass="section-title"/>
+
+            <ListView fx:id="requestsListView"
+                      VBox.vgrow="ALWAYS"
+                      styleClass="itinerary-list"/>
+
+            <Button text="Accept Selected"
+                    prefWidth="180"
+                    styleClass="button-secondary"
+                    onAction="#acceptRequest"/>
+
+        </VBox>
+
+    </VBox>
+
+    <!-- RIGHT COLUMN -->
+
+    <VBox spacing="22"
+          HBox.hgrow="ALWAYS"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 28;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
+
+        <!-- FRIENDS HEADER -->
+
+        <VBox spacing="6">
+
+            <Label text="Friends List"
+                   styleClass="dashboard-title"/>
+
+            <Label text="People you can collaborate and share trips with."
+                   styleClass="dashboard-subtitle"/>
+
+        </VBox>
+
+        <!-- FRIENDS LIST -->
+
+        <ListView fx:id="friendsListView"
+                  VBox.vgrow="ALWAYS"
+                  styleClass="itinerary-list"/>
+
+        <!-- BACK BUTTON -->
+
+        <HBox spacing="12">
+
+            <Button text="Back"
+                    prefWidth="120"
+                    styleClass="button-secondary"
+                    onAction="#goBack"/>
+
+        </HBox>
+
+    </VBox>
+
+    <HBox.hgrow>
+        <Priority fx:constant="ALWAYS"/>
+    </HBox.hgrow>
+
+</HBox>

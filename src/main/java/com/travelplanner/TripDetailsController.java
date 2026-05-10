@@ -7,9 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class TripDetailsController {
@@ -25,22 +33,34 @@ public class TripDetailsController {
     @FXML private ComboBox<String> minuteBox;
     @FXML private ComboBox<String> ampmBox;
     @FXML private ListView<ItineraryItem> itineraryListView;
+    @FXML private Button addButton;
+    @FXML private Button editButton;
+    @FXML private Button deleteButton;
+    @FXML private Label permissionLabel;
 
     private Trip trip;
+    private String returnPage = "/Dashboard.fxml";
 
     @FXML
     public void initialize() {
-        for (int i = 1; i <= 12; i++) hourBox.getItems().add(String.format("%02d", i));
-        for (int i = 0; i < 60; i++) minuteBox.getItems().add(String.format("%02d", i));
+        for (int i = 1; i <= 12; i++) {
+            hourBox.getItems().add(String.format("%02d", i));
+        }
+        for (int i = 0; i < 60; i++) {
+            minuteBox.getItems().add(String.format("%02d", i));
+        }
         ampmBox.getItems().addAll("AM", "PM");
 
         itineraryListView.setOnMouseClicked(event -> {
             ItineraryItem selected = itineraryListView.getSelectionModel().getSelectedItem();
-            if (selected == null || selected.getTitle().startsWith("===")) return;
+            if (selected == null || selected.getTitle().startsWith("===")) {
+                return;
+            }
             activityField.setText(selected.getTitle());
             locationField.setText(selected.getLocation());
             if (selected.getDate() != null && !selected.getDate().isEmpty()) {
-                datePicker.setValue(LocalDate.parse(selected.getDate()));
+                String cleanDate = selected.getDate().split(" ")[0];
+                datePicker.setValue(LocalDate.parse(cleanDate));
             }
             String[] parts = selected.getTime().split("[: ]");
             if (parts.length == 3) {
@@ -51,6 +71,10 @@ public class TripDetailsController {
         });
     }
 
+    public void setReturnPage(String returnPage) {
+        this.returnPage = returnPage;
+    }
+
     public void setTrip(Trip trip) {
         this.trip = trip;
         tripTitle.setText(trip.getName());
@@ -58,44 +82,92 @@ public class TripDetailsController {
         startDateLabel.setText("Start: " + trip.getStartDate());
         endDateLabel.setText("End: " + trip.getEndDate());
         refreshGroupedList();
+        setReadOnlyMode(false);
+    }
+
+    public void setReadOnlyMode(boolean readOnly) {
+        activityField.setDisable(readOnly);
+        locationField.setDisable(readOnly);
+        datePicker.setDisable(readOnly);
+        hourBox.setDisable(readOnly);
+        minuteBox.setDisable(readOnly);
+        ampmBox.setDisable(readOnly);
+        addButton.setDisable(readOnly);
+        editButton.setDisable(readOnly);
+        deleteButton.setDisable(readOnly);
+        permissionLabel.setText(readOnly ? "Permission: VIEW ONLY" : "Permission: CAN EDIT");
     }
 
     private String getSelectedTime() {
-        if (hourBox.getValue() == null || minuteBox.getValue() == null || ampmBox.getValue() == null) return null;
+        if (hourBox.getValue() == null
+                || minuteBox.getValue() == null
+                || ampmBox.getValue() == null) {
+            return null;
+        }
         return hourBox.getValue() + ":" + minuteBox.getValue() + " " + ampmBox.getValue();
     }
 
     @FXML
     private void addActivity() {
-        // SANITIZED INPUTS
         String title = UserManager.sanitize(activityField.getText());
         String location = UserManager.sanitize(locationField.getText());
-        String date = String.valueOf(datePicker.getValue());
+        LocalDate activityDate = datePicker.getValue();
         String time = getSelectedTime();
 
-        if (title.isEmpty()) { showError("Activity name is required"); return; }
-        if (datePicker.getValue() == null) { showError("Please select a date"); return; }
-        if (time == null) { showError("Please select a valid time"); return; }
+        if (title.isEmpty()) {
+            showError("Activity name is required");
+            return;
+        }
+        if (activityDate == null) {
+            showError("Please select a date");
+            return;
+        }
+        if (time == null) {
+            showError("Please select a valid time");
+            return;
+        }
+        if (!isWithinTripDates(activityDate)) {
+            showError("Activity date must be within the trip duration.");
+            return;
+        }
 
-        ItineraryItem item = new ItineraryItem(title, date, time, location);
+        ItineraryItem item = new ItineraryItem(
+                title,
+                activityDate.toString(),
+                time,
+                location
+        );
 
         TripManager.addItineraryItem(trip, item);
-
         refreshGroupedList();
         clearInputs();
-
     }
 
     @FXML
     private void editActivity() {
         ItineraryItem selected = itineraryListView.getSelectionModel().getSelectedItem();
-        if (selected == null || selected.getTitle().startsWith("===")) return;
+        if (selected == null || selected.getTitle().startsWith("===")) {
+            return;
+        }
+
+        LocalDate activityDate = datePicker.getValue();
         String time = getSelectedTime();
-        if (datePicker.getValue() == null) { showError("Please select a date"); return; }
-        if (time == null) { showError("Please select a valid time"); return; }
+
+        if (activityDate == null) {
+            showError("Please select a date");
+            return;
+        }
+        if (time == null) {
+            showError("Please select a valid time");
+            return;
+        }
+        if (!isWithinTripDates(activityDate)) {
+            showError("Activity date must be within the trip duration.");
+            return;
+        }
 
         selected.setTitle(UserManager.sanitize(activityField.getText()));
-        selected.setDate(String.valueOf(datePicker.getValue()));
+        selected.setDate(activityDate.toString());
         selected.setTime(time);
         selected.setLocation(UserManager.sanitize(locationField.getText()));
         TripManager.updateItineraryItem(selected);
@@ -106,10 +178,28 @@ public class TripDetailsController {
     @FXML
     private void deleteActivity() {
         ItineraryItem selected = itineraryListView.getSelectionModel().getSelectedItem();
-        if (selected == null || selected.getTitle().startsWith("===")) return;
-        TripManager.deleteItineraryItem(trip, selected);
+        if (selected == null || selected.getTitle().startsWith("===")) {
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Activity");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Are you sure you want to delete this activity?");
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
+
+        trip.getItinerary().remove(selected);
+        TripManager.deleteItineraryItem(selected.getItemId());
         refreshGroupedList();
-        
+        clearInputs();
+    }
+
+    private boolean isWithinTripDates(LocalDate activityDate) {
+        LocalDate tripStart = LocalDate.parse(trip.getStartDate().split(" ")[0]);
+        LocalDate tripEnd = LocalDate.parse(trip.getEndDate().split(" ")[0]);
+        return !activityDate.isBefore(tripStart) && !activityDate.isAfter(tripEnd);
     }
 
     private void refreshGroupedList() {
@@ -127,26 +217,37 @@ public class TripDetailsController {
     }
 
     private LocalTime parseTime(String time) {
-        try { return LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h:mm a")); }
-        catch (Exception e) { return LocalTime.MIN; }
+        try {
+            return LocalTime.parse(time.toUpperCase(), DateTimeFormatter.ofPattern("h:mm a"));
+        } catch (Exception e) {
+            return LocalTime.MIN;
+        }
     }
 
     private void clearInputs() {
-        activityField.clear(); locationField.clear(); datePicker.setValue(null);
-        hourBox.setValue(null); minuteBox.setValue(null); ampmBox.setValue(null);
+        activityField.clear();
+        locationField.clear();
+        datePicker.setValue(null);
+        hourBox.setValue(null);
+        minuteBox.setValue(null);
+        ampmBox.setValue(null);
     }
 
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null); alert.setContentText(message); alert.showAndWait();
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
     private void goBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(returnPage));
             Stage stage = (Stage) tripTitle.getScene().getWindow();
             stage.getScene().setRoot(loader.load());
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

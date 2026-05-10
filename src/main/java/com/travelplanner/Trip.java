@@ -13,6 +13,9 @@ public class Trip {
     private String ownerEmail;
 
     private List<ItineraryItem> itinerary = new ArrayList<>();
+    public void setItinerary(List<ItineraryItem> itinerary) {
+        this.itinerary = itinerary;
+    }
 
     public Trip(String name, String destination, String startDate, String endDate) {
         this.name = name;

@@ -31,23 +31,30 @@
     </ScrollPane>
 
     <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button text="Back"
+                prefWidth="150"
+                styleClass="button-secondary"
+                onAction="#handleBack"/>
         <Button text="Create Trip"
                 prefWidth="150"
                 styleClass="button-primary"
-                onAction="#goToCreateTrip" />
+                onAction="#goToCreateTrip"/>
         <Button text="Delete Trip"
                 prefWidth="150"
                 styleClass="button-danger"
-                onAction="#handleDeleteTrip" />
+                onAction="#handleDeleteTrip"/>
+        <Button text="Shared Trips"
+                prefWidth="150"
+                styleClass="button-secondary"
+                onAction="#goToSharedTrips"/>
+        <Button text="Manage Sharing"
+                prefWidth="150"
+                styleClass="button-secondary"
+                onAction="#manageSharing"/>
         <Button fx:id="manageUsersButton"
                 text="Manage Users"
                 prefWidth="150"
                 styleClass="button-secondary"
-                onAction="#goToUserManagement" />
-        <Button text="Logout"
-                prefWidth="150"
-                styleClass="button-secondary"
-                onAction="#handleLogout" />
+                onAction="#goToUserManagement"/>
     </HBox>
-
 </VBox>

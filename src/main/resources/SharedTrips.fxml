@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox spacing="28"
+      alignment="TOP_CENTER"
+      styleClass="dashboard-container"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.travelplanner.SharedTripsController"
+      stylesheets="@style.css">
+
+    <padding>
+        <Insets top="35"
+                 right="35"
+                 bottom="35"
+                 left="35"/>
+    </padding>
+
+    <!-- LEFT COLUMN -->
+
+    <VBox spacing="20"
+          HBox.hgrow="ALWAYS"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 28;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
+
+        <VBox spacing="6">
+
+            <Label text="Shared With Me"
+                   styleClass="dashboard-title"/>
+
+            <Label text="Trips other users have shared with you."
+                   styleClass="dashboard-subtitle"/>
+
+        </VBox>
+
+        <ListView fx:id="sharedWithMeListView"
+                  VBox.vgrow="ALWAYS"
+                  styleClass="itinerary-list"/>
+
+        <Button text="Open Selected Trip"
+                prefWidth="190"
+                styleClass="button-primary"
+                onAction="#openSharedTrip"/>
+
+    </VBox>
+
+    <!-- RIGHT COLUMN -->
+
+    <VBox spacing="20"
+          HBox.hgrow="ALWAYS"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 28;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
+
+        <VBox spacing="6">
+
+            <Label text="Trips I Shared"
+                   styleClass="dashboard-title"/>
+
+            <Label text="Trips you've shared with collaborators."
+                   styleClass="dashboard-subtitle"/>
+
+        </VBox>
+
+        <ListView fx:id="sharedByMeListView"
+                  VBox.vgrow="ALWAYS"
+                  styleClass="itinerary-list"/>
+
+        <HBox spacing="12">
+
+            <Button text="Back"
+                    prefWidth="120"
+                    styleClass="button-secondary"
+                    onAction="#goBack"/>
+
+        </HBox>
+
+    </VBox>
+
+    <HBox.hgrow>
+        <Priority fx:constant="ALWAYS"/>
+    </HBox.hgrow>
+
+</HBox>

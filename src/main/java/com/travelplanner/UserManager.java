@@ -12,10 +12,6 @@ import java.util.Map;
 
 public class UserManager {
 
-    public static void loadUsers() {
-        // Not needed anymore because users are loaded from PostgreSQL.
-    }
-
     public static Map<String, String> getUsersWithRoles() {
         Map<String, String> users = new HashMap<>();
         String sql = "SELECT username, role FROM users";
@@ -51,25 +47,20 @@ public class UserManager {
         return false;
     }
 
-    /**
-     * Secures passwords using SHA-256 hashing.
-     * Fixed: Use formatHex() for Java 17 compatibility.
-     */
     private static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(hash); 
+            return HexFormat.of().formatHex(hash);
         } catch (Exception e) {
             throw new RuntimeException("Error hashing password", e);
         }
     }
 
-    /**
-     * Prevents delimiters from breaking the file-based database.
-     */
     public static String sanitize(String input) {
-        if (input == null) return "";
+        if (input == null) {
+            return "";
+        }
         return input.replace("|", "-").replace(",", " ").trim();
     }
 
@@ -86,7 +77,6 @@ public class UserManager {
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return rs.getString("uid");
             }
@@ -106,7 +96,6 @@ public class UserManager {
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return rs.getString("role");
             }
@@ -133,7 +122,6 @@ public class UserManager {
 
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
             System.out.println("Registration failed: " + e.getMessage());
             return false;
@@ -150,7 +138,6 @@ public class UserManager {
 
             ResultSet rs = stmt.executeQuery();
             return rs.next();
-
         } catch (SQLException e) {
             System.out.println("User check failed: " + e.getMessage());
             return false;
@@ -166,11 +153,9 @@ public class UserManager {
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return rs.getString("password").equals(hashPassword(password));
             }
-
         } catch (SQLException e) {
             System.out.println("Login failed: " + e.getMessage());
         }
@@ -191,11 +176,9 @@ public class UserManager {
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return rs.getInt("user_id");
             }
-
         } catch (SQLException e) {
             System.out.println("Failed to get user ID: " + e.getMessage());
         }
