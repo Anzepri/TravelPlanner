@@ -53,7 +53,8 @@ public class TripDetailsController {
             activityField.setText(selected.getTitle());
             locationField.setText(selected.getLocation());
             if (selected.getDate() != null && !selected.getDate().isEmpty()) {
-                datePicker.setValue(LocalDate.parse(selected.getDate()));
+                String cleanDate = selected.getDate().split(" ")[0];
+                datePicker.setValue(LocalDate.parse(cleanDate));
             }
             String[] parts = selected.getTime().split("[: ]");
             if (parts.length == 3) {
@@ -130,29 +131,28 @@ public class TripDetailsController {
         return;
         }
 
-    LocalDate tripStart = LocalDate.parse(trip.getStartDate());
-    LocalDate tripEnd = LocalDate.parse(trip.getEndDate());
+        LocalDate tripStart =LocalDate.parse(trip.getStartDate().split(" ")[0]);
 
-    if (activityDate.isBefore(tripStart)
+        LocalDate tripEnd = LocalDate.parse(trip.getEndDate().split(" ")[0]);
+
+        if (activityDate.isBefore(tripStart)
             || activityDate.isAfter(tripEnd)) {
-
-        showError(
+            showError(
                 "Activity date must be within the trip duration."
         );
         return;
-    }
+        }
 
-    ItineraryItem item = new ItineraryItem(
+        ItineraryItem item = new ItineraryItem(
             title,
             activityDate.toString(),
             time,
             location
-    );
+        );
 
-    TripManager.addItineraryItem(trip, item);
-
-    refreshGroupedList();
-    clearInputs();
+        TripManager.addItineraryItem(trip, item);
+        refreshGroupedList();
+        clearInputs();
     }
 
     @FXML
@@ -174,8 +174,10 @@ public class TripDetailsController {
             showError("Please select a valid time");
             return;
         }
-        LocalDate tripStart = LocalDate.parse(trip.getStartDate());
-        LocalDate tripEnd = LocalDate.parse(trip.getEndDate());
+        LocalDate tripStart =LocalDate.parse(trip.getStartDate().split(" ")[0]);
+
+        LocalDate tripEnd = LocalDate.parse(trip.getEndDate().split(" ")[0]);
+
         if (activityDate.isBefore(tripStart)
             || activityDate.isAfter(tripEnd)) {
         showError(
@@ -191,7 +193,7 @@ public class TripDetailsController {
         selected.setLocation(
             UserManager.sanitize(locationField.getText())
         );
-        TripManager.saveTrips();
+        TripManager.updateItineraryItem(selected);
         refreshGroupedList();
         clearInputs();
     }
@@ -220,7 +222,6 @@ public class TripDetailsController {
         return;
         }
         trip.getItinerary().remove(selected);
-        TripManager.saveTrips();
         TripManager.deleteItineraryItem(selected.getItemId());
         refreshGroupedList();
         clearInputs();

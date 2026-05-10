@@ -1,65 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="650.0"
-            prefWidth="1000.0"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.travelplanner.SharedTripsController">
+<HBox spacing="28"
+      alignment="TOP_CENTER"
+      styleClass="dashboard-container"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.travelplanner.SharedTripsController"
+      stylesheets="@style.css">
 
-    <children>
+    <padding>
+        <Insets top="35"
+                 right="35"
+                 bottom="35"
+                 left="35"/>
+    </padding>
 
-        <Label text="Shared Trips"
-               layoutX="380"
-               layoutY="20"
-               style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+    <!-- LEFT COLUMN -->
 
-        <Button text="Back"
-                layoutX="20"
-                layoutY="20"
-                prefWidth="80"
-                onAction="#goBack"/>
+    <VBox spacing="20"
+          HBox.hgrow="ALWAYS"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 28;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
 
-        <!-- SHARED WITH ME -->
+        <VBox spacing="6">
 
-        <Label text="Shared With Me"
-               layoutX="60"
-               layoutY="90"
-               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+            <Label text="Shared With Me"
+                   styleClass="dashboard-title"/>
+
+            <Label text="Trips other users have shared with you."
+                   styleClass="dashboard-subtitle"/>
+
+        </VBox>
 
         <ListView fx:id="sharedWithMeListView"
-                  layoutX="60"
-                  layoutY="130"
-                  prefWidth="380"
-                  prefHeight="380"/>
+                  VBox.vgrow="ALWAYS"
+                  styleClass="itinerary-list"/>
 
         <Button text="Open Selected Trip"
-                layoutX="60"
-                layoutY="540"
-                prefWidth="180"
+                prefWidth="190"
+                styleClass="button-primary"
                 onAction="#openSharedTrip"/>
 
-        <!-- TRIPS I SHARED -->
+    </VBox>
 
-        <Label text="Trips I Shared"
-               layoutX="560"
-               layoutY="90"
-               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <!-- RIGHT COLUMN -->
+
+    <VBox spacing="20"
+          HBox.hgrow="ALWAYS"
+          style="
+              -fx-background-color: white;
+              -fx-background-radius: 24;
+              -fx-padding: 28;
+              -fx-effect: dropshadow(gaussian, rgba(15,23,42,0.10), 18, 0.2, 0, 8);
+          ">
+
+        <VBox spacing="6">
+
+            <Label text="Trips I Shared"
+                   styleClass="dashboard-title"/>
+
+            <Label text="Trips you've shared with collaborators."
+                   styleClass="dashboard-subtitle"/>
+
+        </VBox>
 
         <ListView fx:id="sharedByMeListView"
-                  layoutX="560"
-                  layoutY="130"
-                  prefWidth="380"
-                  prefHeight="380"/>
+                  VBox.vgrow="ALWAYS"
+                  styleClass="itinerary-list"/>
 
-        <Button text="Manage Sharing"
-                layoutX="560"
-                layoutY="540"
-                prefWidth="180"
-                onAction="#manageSharedTrip"/>
+        <HBox spacing="12">
 
-    </children>
+            <Button text="Back"
+                    prefWidth="120"
+                    styleClass="button-secondary"
+                    onAction="#goBack"/>
 
-</AnchorPane>
+        </HBox>
+
+    </VBox>
+
+    <HBox.hgrow>
+        <Priority fx:constant="ALWAYS"/>
+    </HBox.hgrow>
+
+</HBox>

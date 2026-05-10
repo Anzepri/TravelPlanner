@@ -1,7 +1,19 @@
+# Build files
 target/
+out/
 *.class
 *.log
+
+# IDE files
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Legacy local storage files
 users.txt
-trips.txt.DS_Store
 trips.txt
-users.txt
+
+# Environment / secrets
+.env

@@ -14,15 +14,35 @@ public class CreateTripController {
 
     @FXML
     private TextField nameField;
-
     @FXML
     private TextField destinationField;
-
     @FXML
     private DatePicker startDatePicker;
-
     @FXML
     private DatePicker endDatePicker;
+    @FXML
+    private void handleBack(javafx.event.ActionEvent event) {
+    try {
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/Dashboard.fxml"
+                        )
+                );
+
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.getScene().setRoot(
+                loader.load()
+        );
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+    }
 
     @FXML
     private void handleCreateTrip(javafx.event.ActionEvent event) {

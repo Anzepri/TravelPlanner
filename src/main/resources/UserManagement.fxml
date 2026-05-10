@@ -6,7 +6,8 @@
 
 <VBox alignment="TOP_CENTER" spacing="20"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.travelplanner.UserManagementController">
+      fx:controller="com.travelplanner.UserManagementController"
+      stylesheets="@style.css">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
