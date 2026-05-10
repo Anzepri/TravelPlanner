@@ -1,40 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="20"
+<VBox alignment="TOP_LEFT"
+      styleClass="dashboard-container"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.travelplanner.DashboardController">
+      fx:controller="com.travelplanner.DashboardController"
+      stylesheets="@style.css">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="28" right="28" bottom="28" left="28"/>
     </padding>
-    <!-- Title -->
-    <Label text="Travel Planner Dashboard"
-           style="-fx-font-size: 26px; -fx-font-weight: bold;" />
 
-    <!-- Trip List -->
-    <ListView fx:id="tripListView"
-              prefHeight="300"
-              prefWidth="400" />
+    <VBox spacing="6">
+        <Label text="Travel Planner Dashboard" styleClass="dashboard-title"/>
+        <Label text="Your trips, ready when you are." styleClass="dashboard-subtitle"/>
+    </VBox>
 
-    <!-- Buttons -->
-    <HBox spacing="15" alignment="CENTER">
+    <ScrollPane fitToWidth="true"
+                VBox.vgrow="ALWAYS"
+                hbarPolicy="NEVER"
+                styleClass="dashboard-scroll">
+        <FlowPane fx:id="tripFlowPane" styleClass="trip-grid"/>
+    </ScrollPane>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
         <Button text="Create Trip"
                 prefWidth="150"
-                onAction="#goToCreateTrip"/>
+                styleClass="button-primary"
+                onAction="#goToCreateTrip" />
         <Button text="Delete Trip"
                 prefWidth="150"
-                onAction="#handleDeleteTrip"/>
+                styleClass="button-danger"
+                onAction="#handleDeleteTrip" />
         <Button fx:id="manageUsersButton"
                 text="Manage Users"
                 prefWidth="150"
-                onAction="#goToUserManagement"/>
+                styleClass="button-secondary"
+                onAction="#goToUserManagement" />
         <Button text="Logout"
                 prefWidth="150"
-                onAction="#handleLogout"/>
+                styleClass="button-secondary"
+                onAction="#handleLogout" />
     </HBox>
 
 </VBox>

@@ -3,9 +3,13 @@ package com.travelplanner;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
 
 public class CreateTripController {
 
@@ -22,23 +26,54 @@ public class CreateTripController {
     private DatePicker endDatePicker;
 
     @FXML
+    public void initialize() {
+        startDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
+            LocalDate endDate = endDatePicker.getValue();
+
+            if (newDate != null && endDate != null && endDate.isBefore(newDate)) {
+                endDatePicker.setValue(null);
+            }
+        });
+
+        endDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                LocalDate startDate = startDatePicker.getValue();
+                boolean invalidEndDate = startDate != null && date.isBefore(startDate);
+
+                setDisable(empty || invalidEndDate);
+                if (invalidEndDate) {
+                    setStyle("-fx-opacity: 0.35;");
+                }
+            }
+        });
+    }
+
+    @FXML
     private void handleCreateTrip(javafx.event.ActionEvent event) {
 
         String name = nameField.getText();
         String destination = destinationField.getText();
-        String startDate = String.valueOf(startDatePicker.getValue());
-        String endDate = String.valueOf(endDatePicker.getValue());
+        LocalDate startDateValue = startDatePicker.getValue();
+        LocalDate endDateValue = endDatePicker.getValue();
 
         
         if (name.isEmpty() || destination.isEmpty() ||
-            startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
+            startDateValue == null || endDateValue == null) {
 
-            System.out.println("Please fill in all fields");
+            showError("Please fill in all fields");
+            return;
+        }
+
+        if (endDateValue.isBefore(startDateValue)) {
+            showError("End date cannot be before start date.");
             return;
         }
 
         
-        Trip trip = new Trip(name, destination, startDate, endDate);
+        Trip trip = new Trip(name, destination, startDateValue.toString(), endDateValue.toString());
 
         
         trip.setOwnerEmail(CurrentUser.getEmail());
@@ -60,5 +95,12 @@ public class CreateTripController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

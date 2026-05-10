@@ -1,21 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<VBox spacing="15" alignment="CENTER"
+<HBox alignment="CENTER"
+      styleClass="trip-form-page"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.travelplanner.CreateTripController">
+      fx:controller="com.travelplanner.CreateTripController"
+      stylesheets="@style.css">
 
-    <Label text="Create New Trip"
-           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <padding>
+        <Insets top="42" right="52" bottom="42" left="52"/>
+    </padding>
 
-    <TextField fx:id="nameField" promptText="Trip Name" maxWidth="250"/>
-    <TextField fx:id="destinationField" promptText="Destination" maxWidth="250"/>
+    <StackPane HBox.hgrow="ALWAYS" styleClass="trip-form-visual">
+        <Rectangle width="390" height="470" styleClass="trip-form-visual-panel"/>
+        <VBox alignment="BOTTOM_LEFT" spacing="16" styleClass="trip-form-brand-block">
+            <Label text="Start somewhere memorable" styleClass="trip-form-hero-title" wrapText="true"/>
+            <Label text="Give your trip a name, choose the dates, and build the plan from there." styleClass="trip-form-hero-copy" wrapText="true"/>
+            <HBox spacing="10">
+                <Region styleClass="trip-form-mini-card"/>
+                <Region styleClass="trip-form-mini-card-accent"/>
+                <Region styleClass="trip-form-mini-card"/>
+            </HBox>
+        </VBox>
+    </StackPane>
 
-    <DatePicker fx:id="startDatePicker" />
-    <DatePicker fx:id="endDatePicker" />
+    <VBox alignment="CENTER_LEFT" spacing="22" styleClass="trip-form-panel">
+        <VBox spacing="7">
+            <Label text="Create New Trip" styleClass="form-title"/>
+            <Label text="Set the essentials before adding your itinerary." styleClass="form-subtitle"/>
+        </VBox>
 
-    <Button text="Create Trip" onAction="#handleCreateTrip"/>
+        <VBox spacing="12">
+            <TextField fx:id="nameField"
+                       promptText="Trip name"
+                       maxWidth="Infinity"
+                       styleClass="login-input"/>
+            <TextField fx:id="destinationField"
+                       promptText="Destination"
+                       maxWidth="Infinity"
+                       styleClass="login-input"/>
+            <HBox spacing="12">
+                <DatePicker fx:id="startDatePicker"
+                            promptText="Start date"
+                            maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS"
+                            styleClass="form-date-picker"/>
+                <DatePicker fx:id="endDatePicker"
+                            promptText="End date"
+                            maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS"
+                            styleClass="form-date-picker"/>
+            </HBox>
+        </VBox>
 
-</VBox>
+        <Button text="Create Trip"
+                maxWidth="Infinity"
+                styleClass="button-primary"
+                onAction="#handleCreateTrip"/>
+    </VBox>
+</HBox>

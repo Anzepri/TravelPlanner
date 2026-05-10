@@ -4,17 +4,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
 public class DashboardController {
 
     @FXML
-    private ListView<Trip> tripListView;
+    private FlowPane tripFlowPane;
 
     @FXML
     private Button manageUsersButton;
 
+    private Trip selectedTrip;
+    private Node selectedCard;
     
     @FXML
     public void initialize() {
@@ -28,21 +30,13 @@ public class DashboardController {
 
         manageUsersButton.setVisible(CurrentUser.isAdvisor());
         manageUsersButton.setManaged(CurrentUser.isAdvisor());
-
-        
-        tripListView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                Trip selected = tripListView.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    openTrip(selected);
-                }
-            }
-        });
     }
 
    
    private void refreshTrips() {
-        tripListView.getItems().clear();
+        tripFlowPane.getChildren().clear();
+        selectedTrip = null;
+        selectedCard = null;
 
         String currentUser = CurrentUser.getEmail();
         boolean isAdvisor = CurrentUser.isAdvisor(); // Check the role we stored at login
@@ -52,8 +46,43 @@ public class DashboardController {
         for (Trip t : TripManager.trips) {
             // LOGIC: Show the trip if the user is an Advisor OR if they own the trip
             if (isAdvisor || (t.getOwnerEmail() != null && t.getOwnerEmail().equals(currentUser))) {
-                tripListView.getItems().add(t);
+                addTripCard(t);
             }
+        }
+    }
+
+    private void addTripCard(Trip trip) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TripCard.fxml"));
+            Node card = loader.load();
+
+            TripCardController controller = loader.getController();
+            controller.setTrip(trip);
+
+            card.setOnMouseClicked(event -> {
+                selectTripCard(trip, card);
+
+                if (event.getClickCount() == 2) {
+                    openTrip(trip);
+                }
+            });
+
+            tripFlowPane.getChildren().add(card);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void selectTripCard(Trip trip, Node card) {
+        if (selectedCard != null) {
+            selectedCard.getStyleClass().remove("trip-card-selected");
+        }
+
+        selectedTrip = trip;
+        selectedCard = card;
+
+        if (!card.getStyleClass().contains("trip-card-selected")) {
+            card.getStyleClass().add("trip-card-selected");
         }
     }
 
@@ -69,7 +98,7 @@ public class DashboardController {
             TripDetailsController controller = loader.getController();
             controller.setTrip(trip);
 
-            Stage stage = (Stage) tripListView.getScene().getWindow();
+            Stage stage = (Stage) tripFlowPane.getScene().getWindow();
             stage.getScene().setRoot(root);
 
         } catch (Exception e) {
@@ -119,7 +148,7 @@ public class DashboardController {
     @FXML
     private void handleDeleteTrip() {
 
-    Trip selected = tripListView.getSelectionModel().getSelectedItem();
+    Trip selected = selectedTrip;
 
     if (selected == null) {
         System.out.println("No trip selected");

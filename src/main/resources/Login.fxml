@@ -1,22 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<VBox spacing="15" alignment="CENTER"
+<HBox alignment="CENTER"
+      styleClass="login-page"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.travelplanner.LoginController">
+      fx:controller="com.travelplanner.LoginController"
+      stylesheets="@style.css">
 
-    <Label text="Travel Planner Login"
-           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <padding>
+        <Insets top="40" right="48" bottom="40" left="48"/>
+    </padding>
 
-    <TextField fx:id="emailField" promptText="Email" maxWidth="250"/>
-    <PasswordField fx:id="passwordField" promptText="Password" maxWidth="250"/>
+    <StackPane HBox.hgrow="ALWAYS" styleClass="login-visual">
+        <Rectangle width="390" height="440" styleClass="login-visual-panel"/>
+        <VBox alignment="BOTTOM_LEFT" spacing="18" styleClass="login-brand-block">
+            <Label text="Travel Planner" styleClass="login-brand"/>
+            <Label text="Plan beautiful trips with less friction." styleClass="login-brand-copy" wrapText="true"/>
+            <HBox spacing="10">
+                <Region styleClass="login-destination-tile"/>
+                <Region styleClass="login-destination-tile-accent"/>
+                <Region styleClass="login-destination-tile"/>
+            </HBox>
+        </VBox>
+    </StackPane>
 
-       <Button text="Register" prefWidth="200"
-            onAction="#handleRegister"/>
-       <Button text="Login" prefWidth="200"
-            onAction="#handleLogin"/>
-      
+    <VBox alignment="CENTER_LEFT" spacing="22" styleClass="login-panel">
+        <VBox spacing="7">
+            <Label text="Welcome back" styleClass="login-title"/>
+            <Label text="Sign in or create an account." styleClass="login-subtitle"/>
+        </VBox>
 
-</VBox>
+        <VBox spacing="12">
+            <TextField fx:id="emailField"
+                       promptText="Email"
+                       maxWidth="Infinity"
+                       styleClass="login-input"/>
+            <PasswordField fx:id="passwordField"
+                           promptText="Password"
+                           maxWidth="Infinity"
+                           styleClass="login-input"/>
+        </VBox>
+
+        <VBox spacing="10">
+            <Button text="Login"
+                    maxWidth="Infinity"
+                    styleClass="button-primary"
+                    onAction="#handleLogin"/>
+            <Button text="Register"
+                    maxWidth="Infinity"
+                    styleClass="button-secondary"
+                    onAction="#handleRegister"/>
+        </VBox>
+    </VBox>
+</HBox>

@@ -74,6 +74,7 @@ public class TripDetailsController {
         String time = getSelectedTime();
 
         if (title.isEmpty()) { showError("Activity name is required"); return; }
+        if (datePicker.getValue() == null) { showError("Please select a date"); return; }
         if (time == null) { showError("Please select a valid time"); return; }
 
         ItineraryItem item = new ItineraryItem(title, date, time, location);
@@ -90,13 +91,14 @@ public class TripDetailsController {
         ItineraryItem selected = itineraryListView.getSelectionModel().getSelectedItem();
         if (selected == null || selected.getTitle().startsWith("===")) return;
         String time = getSelectedTime();
+        if (datePicker.getValue() == null) { showError("Please select a date"); return; }
         if (time == null) { showError("Please select a valid time"); return; }
 
         selected.setTitle(UserManager.sanitize(activityField.getText()));
         selected.setDate(String.valueOf(datePicker.getValue()));
         selected.setTime(time);
         selected.setLocation(UserManager.sanitize(locationField.getText()));
-        TripManager.saveTrips();
+        TripManager.updateItineraryItem(selected);
         refreshGroupedList();
         clearInputs();
     }
@@ -105,8 +107,7 @@ public class TripDetailsController {
     private void deleteActivity() {
         ItineraryItem selected = itineraryListView.getSelectionModel().getSelectedItem();
         if (selected == null || selected.getTitle().startsWith("===")) return;
-        trip.getItinerary().remove(selected);
-        TripManager.saveTrips();
+        TripManager.deleteItineraryItem(trip, selected);
         refreshGroupedList();
         
     }

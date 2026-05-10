@@ -1,56 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="15"
+<VBox spacing="22"
+      styleClass="details-page"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.travelplanner.TripDetailsController">
+      fx:controller="com.travelplanner.TripDetailsController"
+      stylesheets="@style.css">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="30" right="34" bottom="30" left="34"/>
     </padding>
 
-    <!-- Title -->
-    <Label fx:id="tripTitle"
-           style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+    <VBox spacing="8" styleClass="details-header">
+        <Label fx:id="tripTitle" styleClass="details-title"/>
+        <HBox spacing="14">
+            <Label fx:id="destinationLabel" styleClass="details-meta-pill"/>
+            <Label fx:id="startDateLabel" styleClass="details-meta-pill"/>
+            <Label fx:id="endDateLabel" styleClass="details-meta-pill"/>
+        </HBox>
+    </VBox>
 
-    <Label fx:id="destinationLabel"/>
-    <Label fx:id="startDateLabel"/>
-    <Label fx:id="endDateLabel"/>
+    <VBox spacing="14" styleClass="itinerary-editor">
+        <Label text="Itinerary" styleClass="section-title"/>
 
-    <!-- Inputs -->
-    <HBox spacing="10">
-        <DatePicker fx:id="datePicker"/>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <DatePicker fx:id="datePicker"
+                        promptText="Date"
+                        HBox.hgrow="ALWAYS"
+                        maxWidth="Infinity"
+                        styleClass="form-date-picker"/>
 
-        <TextField fx:id="activityField"
-                   promptText="Activity"
-                   HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="activityField"
+                       promptText="Activity"
+                       HBox.hgrow="ALWAYS"
+                       maxWidth="Infinity"
+                       styleClass="login-input"/>
 
-        <!-- TIME PICKER -->
-        <HBox spacing="5">
-            <ComboBox fx:id="hourBox" prefWidth="70"/>
-            <Label text=":"/>
-            <ComboBox fx:id="minuteBox" prefWidth="70"/>
-            <ComboBox fx:id="ampmBox" prefWidth="80"/>
+            <HBox spacing="6" alignment="CENTER" styleClass="time-picker-group">
+                <ComboBox fx:id="hourBox" prefWidth="74" styleClass="form-combo-box"/>
+                <Label text=":" styleClass="time-separator"/>
+                <ComboBox fx:id="minuteBox" prefWidth="74" styleClass="form-combo-box"/>
+                <ComboBox fx:id="ampmBox" prefWidth="82" styleClass="form-combo-box"/>
+            </HBox>
+
+            <TextField fx:id="locationField"
+                       promptText="Location"
+                       HBox.hgrow="ALWAYS"
+                       maxWidth="Infinity"
+                       styleClass="login-input"/>
         </HBox>
 
-        <TextField fx:id="locationField"
-                   promptText="Location"
-                   HBox.hgrow="ALWAYS"/>
-    </HBox>
+        <HBox spacing="10">
+            <Button text="Add" prefWidth="110" styleClass="button-primary" onAction="#addActivity"/>
+            <Button text="Edit" prefWidth="110" styleClass="button-secondary" onAction="#editActivity"/>
+            <Button text="Delete" prefWidth="110" styleClass="button-danger" onAction="#deleteActivity"/>
+        </HBox>
+    </VBox>
 
-    <!-- Buttons -->
-    <HBox spacing="10">
-        <Button text="Add" onAction="#addActivity"/>
-        <Button text="Edit" onAction="#editActivity"/>
-        <Button text="Delete" onAction="#deleteActivity"/>
-    </HBox>
+    <ListView fx:id="itineraryListView"
+              styleClass="itinerary-list"
+              VBox.vgrow="ALWAYS"/>
 
-    <!-- List -->
-    <ListView fx:id="itineraryListView" VBox.vgrow="ALWAYS"/>
-
-    <Button text="Back" onAction="#goBack"/>
+    <Button text="Back"
+            prefWidth="110"
+            styleClass="button-secondary"
+            onAction="#goBack"/>
 
 </VBox>

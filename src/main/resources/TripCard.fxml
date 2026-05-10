@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="cardRoot"
+      prefWidth="240"
+      minWidth="240"
+      maxWidth="240"
+      styleClass="trip-card"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.travelplanner.TripCardController"
+      stylesheets="@style.css">
+
+    <StackPane prefHeight="150" styleClass="trip-image-placeholder">
+        <Label text="+" styleClass="trip-image-icon"/>
+    </StackPane>
+
+    <VBox styleClass="trip-card-body">
+        <Label fx:id="tripNameLabel"
+               styleClass="trip-name"
+               wrapText="true"
+               maxWidth="210"/>
+        <Label fx:id="destinationLabel"
+               styleClass="trip-destination"
+               wrapText="true"
+               maxWidth="210"/>
+    </VBox>
+
+    <padding>
+        <Insets top="2" right="2" bottom="14" left="2"/>
+    </padding>
+</VBox>
