@@ -40,6 +40,7 @@ Save
 Right click: 
 travel_planner 
 → Query Tool 
+
 4. Run the Full Schema 
 Copy and run ALL of the SQL below. 
 CREATE TABLE users ( 
@@ -49,6 +50,8 @@ username VARCHAR(255) UNIQUE NOT NULL,
 role VARCHAR(50) DEFAULT 'USER', 
 uid VARCHAR(20) UNIQUE 
 ); 
+
+
 CREATE TABLE trips ( 
 trip_id SERIAL PRIMARY KEY, 
 trip_name VARCHAR(255) NOT NULL, 
@@ -57,6 +60,8 @@ start_date VARCHAR(50) NOT NULL,
 end_date VARCHAR(50) NOT NULL, 
 owner_email VARCHAR(255) 
 ); 
+
+
 CREATE TABLE itinerary_items ( 
 item_id SERIAL PRIMARY KEY, 
 trip_id INTEGER REFERENCES trips(trip_id) ON DELETE CASCADE, title VARCHAR(255) NOT NULL, 
@@ -64,54 +69,72 @@ item_date VARCHAR(50) NOT NULL,
 item_time VARCHAR(50) NOT NULL, 
 location VARCHAR(255) 
 ); 
+
+
 CREATE TABLE friend_requests ( 
 request_id SERIAL PRIMARY KEY, 
 sender_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, receiver_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, 
 2
 status VARCHAR(20) DEFAULT 'PENDING' 
 ); 
+
+
 CREATE TABLE friends ( 
 friendship_id SERIAL PRIMARY KEY, 
 user1_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, user2_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE ); 
+
+
 CREATE TABLE shared_trips ( 
 shared_trip_id SERIAL PRIMARY KEY, 
 trip_id INTEGER REFERENCES trips(trip_id) ON DELETE CASCADE, owner_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, shared_with_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, can_edit BOOLEAN DEFAULT FALSE 
 ); 
+
+
 Press: 
 Execute Script 
 or: 
 F5 
+
+
 5. Generate User UIDs Automatically Run this SQL AFTER the main schema: 
 CREATE OR REPLACE FUNCTION generate_uid() 
 RETURNS TRIGGER AS $$ 
 BEGIN 
 NEW.uid := 'USR' || LPAD(NEW.user_id::TEXT, 5, '0'); 
+
 RETURN NEW; 
+
 END; 
+
 $$ LANGUAGE plpgsql; 
+
 CREATE TRIGGER user_uid_trigger 
 AFTER INSERT ON users 
 FOR EACH ROW 
 EXECUTE FUNCTION generate_uid(); 
+
 Press: 
-3
 F5 
+
 6. Update DatabaseConnection.java Open: 
 src/main/java/com/travelplanner/DatabaseConnection.java Update: 
 private static final String URL = 
-"jdbc:postgresql://localhost:5432/travel_planner"; 
+"jdbc:postgresql://localhost:5432/travel_planner";
+
 private static final String USER = 
 "postgres"; 
+
 private static final String  = 
 "YourPasswordHere"; 
+
 Replace: 
 YourPasswordHere 
 with your own PostgreSQL password. 
-7. Run the Application 
+8. Run the Application 
 Open the project in IntelliJ. 
 Run: 
 Main.java 
-8. First Time Testing 
+9. First Time Testing 
 Recommended test flow: 
 1. Register User 1 
 4
