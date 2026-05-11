@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS shared_trips;
+DROP TABLE IF EXISTS friends;
+DROP TABLE IF EXISTS friend_requests;
 DROP TABLE IF EXISTS shared_access;
 DROP TABLE IF EXISTS expenses;
 DROP TABLE IF EXISTS budgets;
@@ -9,6 +12,8 @@ CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    uid VARCHAR(20) UNIQUE NOT NULL,
+    role VARCHAR(30) NOT NULL DEFAULT 'USER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -25,6 +30,77 @@ CREATE TABLE trips (
         FOREIGN KEY (owner_id)
         REFERENCES users(user_id)
         ON DELETE CASCADE
+);
+
+CREATE TABLE friend_requests (
+    request_id SERIAL PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_request_sender
+        FOREIGN KEY (sender_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_request_receiver
+        FOREIGN KEY (receiver_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT unique_friend_request
+        UNIQUE (sender_id, receiver_id)
+);
+
+CREATE TABLE friends (
+    friend_id SERIAL PRIMARY KEY,
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_friend_user1
+        FOREIGN KEY (user1_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_friend_user2
+        FOREIGN KEY (user2_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT unique_friend_pair
+        UNIQUE (user1_id, user2_id),
+
+    CONSTRAINT no_self_friend
+        CHECK (user1_id <> user2_id)
+);
+
+CREATE TABLE shared_trips (
+    shared_trip_id SERIAL PRIMARY KEY,
+    trip_id INT NOT NULL,
+    owner_id INT NOT NULL,
+    shared_with_id INT NOT NULL,
+    can_edit BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_shared_trip_trip
+        FOREIGN KEY (trip_id)
+        REFERENCES trips(trip_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_shared_trip_owner
+        FOREIGN KEY (owner_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_shared_trip_user
+        FOREIGN KEY (shared_with_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT unique_shared_trip_user
+        UNIQUE (trip_id, shared_with_id)
 );
 
 CREATE TABLE itinerary_items (
