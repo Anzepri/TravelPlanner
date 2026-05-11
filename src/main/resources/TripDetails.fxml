@@ -56,10 +56,10 @@
                        styleClass="login-input"/>
 
             <HBox spacing="6" alignment="CENTER" styleClass="time-picker-group">
-                <ComboBox fx:id="hourBox" prefWidth="74" styleClass="form-combo-box"/>
+                <ComboBox fx:id="hourBox" prefWidth="90" minWidth="90" styleClass="form-combo-box"/>
                 <Label text=":" styleClass="time-separator"/>
-                <ComboBox fx:id="minuteBox" prefWidth="74" styleClass="form-combo-box"/>
-                <ComboBox fx:id="ampmBox" prefWidth="82" styleClass="form-combo-box"/>
+                <ComboBox fx:id="minuteBox" prefWidth="90" minWidth="90" styleClass="form-combo-box"/>
+                <ComboBox fx:id="ampmBox" prefWidth="100" minWidth="100" styleClass="form-combo-box"/>
             </HBox>
 
             <TextField fx:id="locationField"

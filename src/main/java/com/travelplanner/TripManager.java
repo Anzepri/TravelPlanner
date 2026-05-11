@@ -82,8 +82,10 @@ public class TripManager {
             stmt.setInt(1, ownerId);
             stmt.setString(2, trip.getName());
             stmt.setString(3, trip.getDestination());
-            stmt.setString(4, trip.getStartDate());
-            stmt.setString(5, trip.getEndDate());
+
+            //Need to be SQL Dates not strings
+            stmt.setDate(4, java.sql.Date.valueOf(trip.getStartDate()));
+            stmt.setDate(5, java.sql.Date.valueOf(trip.getEndDate()));
 
             ResultSet rs = stmt.executeQuery();
 
@@ -145,13 +147,14 @@ public class TripManager {
 
             stmt.setInt(1, trip.getTripId());
             stmt.setString(2, item.getTitle());
-            stmt.setString(3, item.getDate());
-            stmt.setString(4, item.getTime());
+            stmt.setDate(3, java.sql.Date.valueOf(item.getDate()));
+            stmt.setTime(4, convertToSqlTime(item.getTime()));
             stmt.setString(5, item.getLocation());
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                System.out.println("Itinerary item added successfully with ID: " + item.getItemId());
                 item.setItemId(rs.getInt("item_id"));
             }
 
@@ -183,8 +186,8 @@ public class TripManager {
         ) {
 
             stmt.setString(1, item.getTitle());
-            stmt.setString(2, item.getDate());
-            stmt.setString(3, item.getTime());
+            stmt.setDate(2, java.sql.Date.valueOf(item.getDate()));
+            stmt.setTime(3, convertToSqlTime(item.getTime()));
             stmt.setString(4, item.getLocation());
             stmt.setInt(5, item.getItemId());
 
@@ -273,4 +276,39 @@ public class TripManager {
 
         return items;
     }
+
+    
+    private static java.sql.Time convertToSqlTime(String displayTime) {
+        if (displayTime == null || displayTime.isBlank()) {
+            return null;
+        }
+
+        try {
+            // Handles format like 03:30 PM
+            java.time.LocalTime time = java.time.LocalTime.parse(
+                    displayTime.toUpperCase(),
+                    java.time.format.DateTimeFormatter.ofPattern("hh:mm a")
+            );
+            return java.sql.Time.valueOf(time);
+        } catch (Exception e1) {
+            try {
+                // Handles format like 3:30 PM
+                java.time.LocalTime time = java.time.LocalTime.parse(
+                        displayTime.toUpperCase(),
+                        java.time.format.DateTimeFormatter.ofPattern("h:mm a")
+                );
+                return java.sql.Time.valueOf(time);
+            } catch (Exception e2) {
+                try {
+                    // Handles format like 15:30
+                    java.time.LocalTime time = java.time.LocalTime.parse(displayTime);
+                    return java.sql.Time.valueOf(time);
+                } catch (Exception e3) {
+                    System.out.println("Invalid time format: " + displayTime);
+                    return null;
+                }
+            }
+        }
+    }
+
 }
